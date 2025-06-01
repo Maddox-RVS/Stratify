@@ -1,12 +1,11 @@
-from Strategy import Strategy
+from strategy import Strategy
 
 class MyStrategy(Strategy):
     def __init__(self):
         super().__init__()
 
-    def next(self):
-        if self.close > 120.0: self.buy()
-        else: self.sell()
+        self.bought: bool = False
 
-    def end(self):
-        print(f'{self.__class__.__name__}: {len(self.orders)}')
+    def next(self):
+        if not self.bought: self.buy(100)
+        self.bought = True

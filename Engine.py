@@ -1,28 +1,12 @@
-from dataclasses import dataclass
-from Strategy import Strategy
+from strategy import Strategy
 from datetime import datetime
+from broker import BrokerStandard
+from data import TickerData
+from data import TickerFeed
 import yfinance
 import pandas
 
 import mystrat
-
-@dataclass
-class TickerData():
-    ticker: str
-    dateTime: datetime
-    open: float
-    close: float
-    low: float
-    high: float
-    volume: int
-
-class TickerFeed():
-    def __init__(self, data: list[TickerData] = None):
-        if data == None: data = []
-        self.feed: list[TickerData] = data
-
-    def __len__(self) -> int:
-        return len(self.feed)
 
 def downloadData(ticker: str, start: datetime, end: datetime) -> TickerFeed:
     yfinanceData: pandas.DataFrame = yfinance.download(ticker, start.strftime('%Y-%m-%d'), end.strftime('%Y-%m-%d'), progress=True, auto_adjust=True)
@@ -54,6 +38,7 @@ class BacktestEngine(__Engine__):
         super().__init__()
         self.tickerFeeds: list[TickerFeed] = []
         self.strategies: list[Strategy] = []
+        self.broker: BrokerStandard = BrokerStandard()
 
     def addTickerData(self, tickerFeed: TickerFeed):
         self.tickerFeeds.append(tickerFeed)
@@ -78,7 +63,16 @@ class BacktestEngine(__Engine__):
                     strategy.volume = tickerData.volume
                     strategy.next()
 
+                    self.broker.openOrders += strategy.orders
+                    strategy.orders.clear()
+
+                self.broker.__executeOrders__(tickerData)
+
         for strategy in self.strategies: strategy.end()
+
+        print(f'Open Orders: {len(self.broker.openOrders)}')
+        print(f'Closed Orders: {len(self.broker.closedOrders)}')
+        print(f'Final Cash Amount: {self.broker.cash}')
 
 if __name__ == '__main__':
     data = []
@@ -96,4 +90,6 @@ if __name__ == '__main__':
     
     backtestEngine.addStrategy(mystrat.MyStrategy)
     
+    backtestEngine.broker.setCash(10000)
+
     backtestEngine.run()

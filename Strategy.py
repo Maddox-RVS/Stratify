@@ -1,10 +1,10 @@
-from Order import Order, BuyOrder, SellOrder
+from order import __Order__, BuyOrder, SellOrder, CloseOrder
 from datetime import datetime
 from typing import Union
 
 class Strategy():
     def __init__(self):
-        self.orders: list[Order] = []
+        self.orders: list[__Order__] = []
 
         self.ticker: Union[None, str] = None
         self.dateTime: Union[None, datetime] = None
@@ -29,4 +29,8 @@ class Strategy():
 
     def sell(self, units: int = 1):
         order: SellOrder = SellOrder(self.ticker, units)
+        self.orders.append(order)
+
+    def close(self):
+        order: CloseOrder = CloseOrder(self.ticker)
         self.orders.append(order)
