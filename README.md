@@ -60,8 +60,7 @@ pip install -r requirements.txt
 Stratify allows developers to build and test trading strategies by:
 
 1. Creating strategy classes that inherit from the `Strategy` base class
-2. Loading those classes through JSON configurations
-3. Running them in backtesting or paper trading engines with minimal setup
+2. Running them in backtesting or paper trading engines with minimal setup
 
 ```python
 # Example
@@ -84,6 +83,6 @@ class MyStrategy(Strategy):
         pass
 ```
 
-Run backtests or paper trading sessions with your configured strategies and explore your results via built-in analytics.
+Run backtests or paper trading sessions with your programmed strategies and explore your results via built-in analytics.
 
 ---
