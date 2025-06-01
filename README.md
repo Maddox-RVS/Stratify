@@ -1,26 +1,26 @@
-# ⚙️ STRATIFY ⚙️  
-### 🚀 A Developer-First Framework for Trading Strategies
+# STRATIFY 
+### A Developer-First Framework for Trading Strategies
 
 ---
 
-## 📚 Table of Contents
+## Table of Contents
 
-- [✨ Project Overview](#✨-project-overview)
-- [🚀 Key Features](#🚀-key-features)
-- [📦 Prerequisites](#📦-prerequisites)
-- [📥 Installation](#📥-installation)
-- [⚙️ Usage](#⚙️-usage)
+- [Project Overview](#project-overview)
+- [Key Features](#key-features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
 
 ---
 
-## ✨ Project Overview
+## Project Overview
 
 **Stratify** is a developer-first framework for crafting, testing, and simulating trading strategies.  
 Strategies are Python classes that inherit from a base `Strategy` class and can be easily loaded into backtesting and paper trading engines, enabling fast iteration and streamlined development.
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 - 💻 **Developer-First Approach** – Code-centric design with flexible configuration.
 - 🐍 **Pythonic Strategies** – Inheritable Python classes for defining strategy logic.
@@ -33,14 +33,14 @@ Strategies are Python classes that inherit from a base `Strategy` class and can 
 
 ---
 
-## 📦 Prerequisites
+## Prerequisites
 
 - **Python 3.13.2** (or compatible version)
 - **pip** – Python package manager (usually comes with Python)
 
 ---
 
-## 📥 Installation
+## Installation
 
 1. **Clone the repository**  
 ```bash
@@ -55,7 +55,7 @@ pip install -r requirements.txt
 
 ---
 
-## ⚙️ Usage
+## Usage
 
 Stratify allows developers to build and test trading strategies by:
 
