@@ -8,7 +8,7 @@
 - [Project Overview](#project-overview)
 - [Key Features](#key-features)
 - [Prerequisites](#prerequisites)
-- [Installation](#installation)
+- [Setup](#setup)
 - [Usage](#usage)
 
 ---
@@ -22,26 +22,37 @@ Strategies are Python classes that inherit from a base `Strategy` class and can 
 
 ## Key Features
 
-- 💻 **Developer-First Approach** – Code-centric design with flexible configuration.
-- 🐍 **Pythonic Strategies** – Inheritable Python classes for defining strategy logic.
-- ⚙️ **Optimizable Parameters** – Adjustable strategy parameters for testing and tuning.
-- ⚡ **Fast Iteration** – Rapid prototyping and refinement of trading ideas.
-- 📈 **Comprehensive Backtesting** – Evaluate strategies against historical data.
-- 📊 **Live Paper Trading** – Simulate performance on live data feeds.
-- 💡 **Extensive Technical Indicators** – Access a wide range of built-in indicators.
-- 📋 **Detailed Performance Metrics** – Track detailed and customizable statistics.
+- 💻 **Developer-First Approach** ─► Code-centric design with flexible configuration.
+- 🐍 **Pythonic Strategies** ─► Inheritable Python classes for defining strategy logic.
+- ⚙️ **Optimizable Parameters** ─► Adjustable strategy parameters for testing and tuning.
+- ⚡ **Fast Iteration** ─► Rapid prototyping and refinement of trading ideas.
+- 📈 **Comprehensive Backtesting** ─► Evaluate strategies against historical data.
+- 📊 **Live Paper Trading** ─► Simulate performance on live data feeds.
+- 💡 **Extensive Technical Indicators** ─► Access a wide range of built-in indicators.
+- 📋 **Detailed Performance Metrics** ─► Track detailed and customizable statistics.
 
 ---
 
 ## Prerequisites
 
 - **Python 3.13.2** (or compatible version)
-- **pip** – Python package manager (usually comes with Python)
+- **pip** ─► Python package manager (usually comes with Python)
 
 ---
 
-## Installation
+## Setup
 
+### Conda Enviornment
+1. **Create new python enviornment (3.13.2 recommended)**
+```bash
+conda create -n stratifyEnv python=3.13.2
+```
+After the enviornment has been created:
+```bash
+conda activate stratifyEnv
+```
+
+### Installation
 1. **Clone the repository**  
 ```bash
 git clone https://github.com/Maddox-RVS/Stratify.git
