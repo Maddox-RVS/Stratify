@@ -5,11 +5,11 @@
 
 ## 📚 Table of Contents
 
-- [✨ Project Overview](#-project-overview)
-- [🚀 Key Features](#-key-features)
-- [📦 Prerequisites](#-prerequisites)
-- [📥 Installation](#-installation)
-- [⚙️ Usage](#-usage)
+- [✨ Project Overview](#✨-project-overview)
+- [🚀 Key Features](#🚀-key-features)
+- [📦 Prerequisites](#📦-prerequisites)
+- [📥 Installation](#📥-installation)
+- [⚙️ Usage](#⚙️-usage)
 
 ---
 
