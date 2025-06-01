@@ -40,8 +40,18 @@ class BacktestEngine(__Engine__):
         self.strategies: list[Strategy] = []
         self.broker: BrokerStandard = BrokerStandard()
 
+    def __getFirstDate__(self) -> datetime:
+        allFirstDates: list[datetime] = [tickerFeed.getByFirstDate() for tickerFeed in self.tickerFeeds]
+        return min(allFirstDates)
+
+    def __getLastDate__(self) -> datetime:
+        allLastDates: list[datetime] = [tickerFeed.getByLastDate() for tickerFeed in self.tickerFeeds]
+        return max(allLastDates)
+
     def addTickerData(self, tickerFeed: TickerFeed):
         self.tickerFeeds.append(tickerFeed)
+        self.broker.__tickerFeeds__ = self.tickerFeeds
+        self.broker.__dateTime__ = self.__getFirstDate__()
 
     def addStrategy(self, strategy: Strategy):
         self.strategies.append(strategy())
@@ -49,9 +59,15 @@ class BacktestEngine(__Engine__):
     def run(self) -> list[Strategy]:
         for strategy in self.strategies: strategy.start()
 
-        allDateTimes: set[datetime] = set([tickerData.dateTime for tickerFeed in self.tickerFeeds for tickerData in tickerFeed.feed])
+        # Flattens all datetimes from all tickerfeeds into single list, then removes duplicates and sorts from smallest to largest
+        allDateTimes: set[datetime] = sorted(list(set([tickerData.dateTime for tickerFeed in self.tickerFeeds for tickerData in tickerFeed.feed])))
+
         for dateTime in allDateTimes:
+            self.broker.__dateTime__ = dateTime
+
+            # Creates a tickerfeed containing only ticker data that has a datetime equal to 'dateTime' loop index
             timestampTickerFeed: TickerFeed = TickerFeed([tickerData for tickerFeed in self.tickerFeeds for tickerData in tickerFeed.feed if tickerData.dateTime == dateTime])
+
             for tickerData in timestampTickerFeed.feed:
                 for strategy in self.strategies:
                     strategy.ticker = tickerData.ticker
@@ -63,16 +79,12 @@ class BacktestEngine(__Engine__):
                     strategy.volume = tickerData.volume
                     strategy.next()
 
-                    self.broker.openOrders += strategy.orders
+                    self.broker.__openOrders__ += strategy.orders
                     strategy.orders.clear()
 
                 self.broker.__executeOrders__(tickerData)
 
         for strategy in self.strategies: strategy.end()
-
-        print(f'Open Orders: {len(self.broker.openOrders)}')
-        print(f'Closed Orders: {len(self.broker.closedOrders)}')
-        print(f'Final Cash Amount: {self.broker.cash}')
 
 if __name__ == '__main__':
     data = []
@@ -92,4 +104,10 @@ if __name__ == '__main__':
     
     backtestEngine.broker.setCash(10000)
 
+    print(f'Starting Portfolio Value: {backtestEngine.broker.getPortfolioValue()}')
+    
     backtestEngine.run()
+    
+    print(f'Open Orders: {len(backtestEngine.broker.__openOrders__)}')
+    print(f'Closed Orders: {len(backtestEngine.broker.__closedOrders__)}')
+    print(f'Final Portfolio Value: {backtestEngine.broker.getPortfolioValue()}')
