@@ -1,0 +1,2 @@
+class StatisticsManager():
+    pass
