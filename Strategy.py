@@ -3,7 +3,15 @@ from datetime import datetime
 from typing import Union
 
 class Strategy():
+    '''
+    Base class for defining trading strategies.
+    '''
+
     def __init__(self):
+        '''
+        Initializes a new strategy instance.
+        '''
+
         self.orders: list[Order] = []
 
         self.ticker: Union[None, str] = None
@@ -15,25 +23,60 @@ class Strategy():
         self.volume: Union[None, int] = None
 
     def start(self):
+        '''
+        Called once before the strategy begins processing data.
+        Intended to be overridden by custom strategies.
+        '''
+
         pass
 
     def next(self):
+        '''
+        Called on every new data point (bar). Contains main strategy logic.
+        Intended to be overridden by custom strategies.
+        '''
+
         pass
 
     def end(self):
+        '''
+        Called once after all data has been processed.
+        Intended to be overridden by custom strategies.
+        '''
+
         pass
 
     def buy(self, units: int = 1) -> Order:
+        '''
+        Places a buy order for the current ticker.
+
+        :param units: Number of units to buy.
+        :return: The created BuyOrder object.
+        '''
+
         order: BuyOrder = BuyOrder(self.ticker, units)
         self.orders.append(order)
         return order
 
     def sell(self, units: int = 1) -> Order:
+        '''
+        Places a sell order for the current ticker.
+
+        :param units: Number of units to sell.
+        :return: The created SellOrder object.
+        '''
+
         order: SellOrder = SellOrder(self.ticker, units)
         self.orders.append(order)
         return order
 
     def close(self) -> Order:
+        '''
+        Closes the current position by placing a CloseOrder.
+
+        :return: The created CloseOrder object.
+        '''
+
         order: CloseOrder = CloseOrder(self.ticker)
         self.orders.append(order)
         return order

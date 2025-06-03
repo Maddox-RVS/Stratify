@@ -7,7 +7,15 @@ from data import Position
 from typing import Union
 
 class BrokerStandard():
+    '''
+    A basic broker model that handles positions, orders, and cash management.
+    '''
+
     def __init__(self):
+        '''
+        Initializes the broker with default values for cash, commission, positions, and orders.
+        '''
+
         self.cash: float = 0.0
         self.commissionPercent: float = 0.0
 
@@ -20,15 +28,40 @@ class BrokerStandard():
         self.__tickerFeeds__: list[TickerFeed] = []
 
     def setCash(self, cashAmount: float):
+        '''
+        Sets the initial cash available in the broker.
+
+        :param cashAmount: The amount of cash to set.
+        '''
+
         self.cash = cashAmount
 
     def addCash(self, cashAmount: float):
+        '''
+        Adds cash to the broker account.
+
+        :param cashAmount: The amount of cash to add.
+        '''
+
         self.cash += cashAmount
 
     def setCommisionPercent(self, commisionPercent: float):
+        '''
+        Sets the commission percentage charged per trade.
+
+        :param commisionPercent: Commission as a decimal (e.g., 0.01 for 1%).
+        '''
+
         self.commissionPercent = commisionPercent
 
     def getPosition(self, ticker) -> int:
+        '''
+        Gets the number of units held for a given ticker.
+
+        :param ticker: The stock ticker symbol.
+        :return: Number of units held for the ticker.
+        '''
+
         tickers: list[str] = [position.ticker for position in self.__positions__]
         if ticker not in tickers: return 0
         for position in self.__positions__:
@@ -36,6 +69,12 @@ class BrokerStandard():
                 return position.units
             
     def getPortfolioValue(self) -> float:
+        '''
+        Calculates the total portfolio value (cash + value of positions).
+
+        :return: The total portfolio value.
+        '''
+
         value: float = self.cash
 
         # Creates a tickerfeed containing only ticker data that has a datetime equal to 'dateTime' loop index
@@ -48,18 +87,45 @@ class BrokerStandard():
         return value
     
     def __getTickerInfo__(self, ticker: str) -> TickerData:
+        '''
+        Retrieves TickerData for the given ticker at the current broker datetime.
+
+        :param ticker: The stock ticker symbol.
+        :return: The matching TickerData object.
+        '''
+
         # Finds ticker data containing only a datetime equal to 'dateTime' loop index and has a ticker equal to 'ticker' argument
         tickerInfo: TickerData = [tickerData for tickerFeed in self.__tickerFeeds__ for tickerData in tickerFeed.feed 
                                                     if tickerData.dateTime == self.__dateTime__ and tickerData.ticker == ticker][0]
         return tickerInfo
     
     def __closeOrder__(self, order: Order):
+        '''
+        Moves an order from open to closed.
+
+        :param order: The order to close.
+        '''
+
         self.__closedOrders__.append(order)
         self.__openOrders__.remove(order)
+
     def __rejectOrder__(self, order: Order):
+        '''
+        Removes an order entirely. Order is not counted as closed.
+
+        :param order: The order to reject.
+        '''
+
         self.__openOrders__.remove(order)
 
     def __executeBuyOrder__(self, tickerData: TickerData, order: Order):
+        '''
+        Executes a BuyOrder if sufficient cash and volume are available.
+
+        :param tickerData: The market data used for order execution.
+        :param order: The BuyOrder to execute.
+        '''
+
         tickerVolume: int = tickerData.volume
         unitsNeeded: int = min(order.units, tickerVolume)
         unitPrice: float = tickerData.close
@@ -84,6 +150,13 @@ class BrokerStandard():
         self.__closeOrder__(order)
 
     def __executeSellOrder__(self, tickerData: TickerData, order: Order):
+        '''
+        Executes a SellOrder based on current holdings.
+
+        :param tickerData: The market data used for order execution.
+        :param order: The SellOrder to execute.
+        '''
+
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
         unitPrice: float = tickerData.close
 
@@ -105,6 +178,13 @@ class BrokerStandard():
         self.__closeOrder__(order)
 
     def __executeCloseOrder__(self, tickerData: TickerData, order: Order):
+        '''
+        Closes an open position by selling all units.
+
+        :param tickerData: The market data used for order execution.
+        :param order: The CloseOrder to execute.
+        '''
+
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
 
         if position.units == 0:
@@ -116,6 +196,12 @@ class BrokerStandard():
         self.__executeSellOrder__(tickerData, order)
             
     def __executeOrders__(self, tickerData: TickerData):
+        '''
+        Executes all open orders relevant to the provided ticker data.
+
+        :param tickerData: The TickerData against which to match and execute orders.
+        '''
+
         for order in self.__openOrders__:
             if order.fillStatus == FillStatus.CANCELLED:
                 self.__rejectOrder__(order)

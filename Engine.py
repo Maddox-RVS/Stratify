@@ -9,6 +9,16 @@ import pandas
 import mystrat
 
 def downloadData(ticker: str, start: datetime, end: datetime) -> TickerFeed:
+    '''
+    Downloads historical stock data for a given ticker between start and end dates using yfinance,
+    and converts it into a TickerFeed object.
+
+    :param ticker: The stock ticker symbol (e.g., 'AAPL').
+    :param start: The start date of the data range.
+    :param end: The end date of the data range.
+    :return: A TickerFeed containing TickerData for each trading day in the given range.
+    '''
+    
     yfinanceData: pandas.DataFrame = yfinance.download(ticker, start.strftime('%Y-%m-%d'), end.strftime('%Y-%m-%d'), progress=True, auto_adjust=True)
     data: list[TickerData] = []
 
@@ -24,39 +34,102 @@ def downloadData(ticker: str, start: datetime, end: datetime) -> TickerFeed:
     return TickerFeed(data)
 
 class __Engine__():
-    def addTickerData(self, data: list[TickerData]):
+    '''
+    Abstract base class for a trading engine. Provides an interface for adding ticker data and strategies,
+    and running the backtest or live paper trading session.
+    '''
+
+    def addTickerData(self, tickerFeed: TickerFeed):
+        '''
+        Adds a ticker feed to the engine.
+
+        :param tickerData: An object 'TickerFeed' which contains a feed of TickerData objects.
+        '''
+
         pass
 
     def addStrategy(self, strategy: Strategy):
+        '''
+        Adds a trading strategy to the engine.
+
+        :param strategy: A strategy class that inherits from the Strategy base class.
+        '''
+
         pass
 
     def run(self) -> list[Strategy]:
+        '''
+        Runs the trading engine, executing each strategy over the given market data.
+
+        :return: A list of strategies after execution.
+        '''
+
         pass
 
 class BacktestEngine(__Engine__):
+    '''
+    Backtesting engine that simulates historical trading using strategies and historical ticker data.
+    '''
+
     def __init__(self):
+        '''
+        Initializes the BacktestEngine with an empty list of ticker feeds and strategies,
+        and a standard broker.
+        '''
+
         super().__init__()
         self.tickerFeeds: list[TickerFeed] = []
         self.strategies: list[Strategy] = []
         self.broker: BrokerStandard = BrokerStandard()
 
     def __getFirstDate__(self) -> datetime:
+        '''
+        Gets the earliest date from all ticker feeds.
+
+        :return: The earliest datetime from the ticker data.
+        '''
+
         allFirstDates: list[datetime] = [tickerFeed.getByFirstDate() for tickerFeed in self.tickerFeeds]
         return min(allFirstDates)
 
     def __getLastDate__(self) -> datetime:
+        '''
+        Gets the latest date from all ticker feeds.
+
+        :return: The latest datetime from the ticker data.
+        '''
+
         allLastDates: list[datetime] = [tickerFeed.getByLastDate() for tickerFeed in self.tickerFeeds]
         return max(allLastDates)
 
     def addTickerData(self, tickerFeed: TickerFeed):
+        '''
+        Adds a ticker feed to the engine and updates the broker with the initial date.
+
+        :param tickerFeed: A TickerFeed object containing historical market data.
+        '''
+
         self.tickerFeeds.append(tickerFeed)
         self.broker.__tickerFeeds__ = self.tickerFeeds
         self.broker.__dateTime__ = self.__getFirstDate__()
 
     def addStrategy(self, strategy: Strategy):
+        '''
+        Instantiates and adds a strategy to the engine.
+
+        :param strategy: A subclass of Strategy to be added and instantiated.
+        '''
+
         self.strategies.append(strategy())
 
     def run(self) -> list[Strategy]:
+        '''
+        Runs all added strategies on the historical data in chronological order.
+        Simulates order execution using the broker.
+
+        :return: A list of all strategies after completing the backtest.
+        '''
+        
         for strategy in self.strategies: strategy.start()
 
         # Flattens all datetimes from all tickerfeeds into single list, then removes duplicates and sorts from smallest to largest
