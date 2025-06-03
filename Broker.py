@@ -9,7 +9,7 @@ from typing import Union
 class BrokerStandard():
     def __init__(self):
         self.cash: float = 0.0
-        self.commission: float = 0.0
+        self.commissionPercent: float = 0.0
 
         self.__positions__: dict[str:Position] = {}
 
@@ -26,7 +26,7 @@ class BrokerStandard():
         self.cash += cashAmount
 
     def setCommisionPercent(self, commisionPercent: float):
-        self.commission = commisionPercent
+        self.commissionPercent = commisionPercent
 
     def getPosition(self, ticker) -> int:
         tickers: list[str] = [position.ticker for position in self.__positions__]
@@ -64,16 +64,18 @@ class BrokerStandard():
         unitsNeeded: int = min(order.units, tickerVolume)
         unitPrice: float = tickerData.close
 
-        if unitPrice > self.cash or self.cash == 0.0 or tickerVolume == 0 or order.units < 1:
+
+        if (unitPrice + (unitPrice * self.commissionPercent)) > self.cash or self.cash <= 0.0 or tickerVolume < 1 or order.units < 1:
             order.fillStatus = FillStatus.REJECTED
             self.__rejectOrder__(order)
             return
         
-        tangibleUnits: int = min(unitsNeeded, int(self.cash / unitPrice))
+        tangibleUnits: int = min(unitsNeeded, int(self.cash / (unitPrice + (unitPrice * self.commissionPercent))))
         orderCost: float = unitPrice * tangibleUnits
+        commisionCash: float = orderCost * self.commissionPercent
 
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
-        self.cash -= orderCost
+        self.cash -= (orderCost + commisionCash)
         position.units += tangibleUnits
         self.__positions__[order.ticker] = position
 
@@ -92,7 +94,9 @@ class BrokerStandard():
 
         unitsToSell: int = min(order.units, position.units)
         sellValue: float = unitPrice * unitsToSell
-        self.cash += sellValue
+        commissionCash: float = sellValue * self.commissionPercent
+        netCashReceived = sellValue - commissionCash
+        self.cash += netCashReceived
         position.units -= unitsToSell
         self.__positions__[order.ticker] = position
 
