@@ -82,7 +82,6 @@ class BacktestEngine(__Engine__):
         super().__init__()
         self.tickerFeeds: list[TickerFeed] = []
         self.strategies: list[Strategy] = []
-        self.
         self.broker: BrokerStandard = BrokerStandard()
 
     def __getFirstDate__(self) -> datetime:
@@ -137,14 +136,20 @@ class BacktestEngine(__Engine__):
 
         for strategy in self.strategies: strategy.start()
 
-        # Flattens all datetimes from all tickerfeeds into single list, then removes duplicates and sorts from smallest to largest
-        allDateTimes: set[datetime] = sorted(list(set([tickerData.dateTime for tickerFeed in self.tickerFeeds for tickerData in tickerFeed.feed])))
+        allDateTimes: list[datetime] = []
+        for tickerFeed in self.tickerFeeds:
+            for tickerData in tickerFeed.feed:
+                allDateTimes.append(tickerData.dateTime)
+        allDateTimes = sorted(set(allDateTimes))
 
         for dateTime in allDateTimes:
             self.broker.__dateTime__ = dateTime
 
-            # Creates a tickerfeed containing only ticker data that has a datetime equal to 'dateTime' loop index
-            timestampTickerFeed: TickerFeed = TickerFeed([tickerData for tickerFeed in self.tickerFeeds for tickerData in tickerFeed.feed if tickerData.dateTime == dateTime])
+            timestampTickerFeed: TickerFeed = TickerFeed()
+            for tickerFeed in self.tickerFeeds:
+                for tickerData in tickerFeed.feed:
+                    if tickerData.dateTime == dateTime:
+                        timestampTickerFeed.feed.append(tickerData)
 
             for tickerData in timestampTickerFeed.feed:
                 for strategy in self.strategies:
@@ -159,6 +164,8 @@ class BacktestEngine(__Engine__):
 
                     self.broker.__openOrders__ += strategy.orders
                     strategy.orders.clear()
+
+                    print(tickerData.dateTime)
 
                 self.broker.__executeOrders__(tickerData)
 

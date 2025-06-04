@@ -96,8 +96,11 @@ class BrokerStandard():
 
         value: float = self.cash
 
-        # Creates a tickerfeed containing only ticker data that has a datetime equal to 'dateTime' loop index
-        timestampTickerFeed: TickerFeed = TickerFeed([tickerData for tickerFeed in self.__tickerFeeds__ for tickerData in tickerFeed.feed if tickerData.dateTime == self.__dateTime__])
+        timestampTickerFeed: TickerFeed = TickerFeed()
+        for tickerFeed in self.__tickerFeeds__:
+            for tickerData in tickerFeed.feed:
+                if tickerData.dateTime == self.__dateTime__:
+                    timestampTickerFeed.feed.append(tickerData)
         
         for tickerData in timestampTickerFeed.feed:
             position: Position = self.__positions__.get(tickerData.ticker, Position(tickerData.ticker))
@@ -113,9 +116,15 @@ class BrokerStandard():
         :return: The matching TickerData object.
         '''
 
-        # Finds ticker data containing only a datetime equal to 'dateTime' loop index and has a ticker equal to 'ticker' argument
-        tickerInfo: TickerData = [tickerData for tickerFeed in self.__tickerFeeds__ for tickerData in tickerFeed.feed 
-                                                    if tickerData.dateTime == self.__dateTime__ and tickerData.ticker == ticker][0]
+        tickerInfo: Union[None, TickerData] = None
+        for tickerFeed in self.__tickerFeeds__:
+            for tickerData in tickerFeed.feed:
+                if tickerData.dateTime == self.__dateTime__ and tickerData.ticker == ticker:
+                    tickerInfo = tickerData
+                    break
+            if tickerInfo != None:
+                break               
+
         return tickerInfo
     
     def __closeOrder__(self, order: Order) -> None:
