@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from strategy import Strategy
 from datetime import datetime
 from broker import BrokerStandard
@@ -33,12 +34,13 @@ def downloadData(ticker: str, start: datetime, end: datetime) -> TickerFeed:
 
     return TickerFeed(data)
 
-class __Engine__():
+class __Engine__(ABC):
     '''
     Abstract base class for a trading engine. Provides an interface for adding ticker data and strategies,
     and running the backtest or live paper trading session.
     '''
 
+    @abstractmethod
     def addTickerData(self, tickerFeed: TickerFeed) -> None:
         '''
         Adds a ticker feed to the engine.
@@ -49,6 +51,7 @@ class __Engine__():
 
         pass
 
+    @abstractmethod
     def addStrategy(self, strategy: Strategy) -> None:
         '''
         Adds a trading strategy to the engine.
@@ -59,6 +62,7 @@ class __Engine__():
 
         pass
 
+    @abstractmethod
     def run(self) -> list[Strategy]:
         '''
         Runs the trading engine, executing each strategy over the given market data.
