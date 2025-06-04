@@ -197,9 +197,9 @@ class BacktestEngine(__Engine__):
 
                 self.broker.__executeOrders__(tickerData)
 
-                for strategy in self.strategies:
-                    strategy.end()
-                    strategy.__statisticsManager__.end()
+        for strategy in self.strategies:
+            strategy.end()
+            strategy.__statisticsManager__.end()
 
 if __name__ == '__main__':
     data = []
