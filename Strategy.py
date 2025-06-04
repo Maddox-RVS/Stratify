@@ -1,4 +1,4 @@
-from order import Order, BuyOrder, SellOrder, CloseOrder
+from .order import Order, BuyOrder, SellOrder, CloseOrder
 from datetime import datetime
 from typing import Union
 

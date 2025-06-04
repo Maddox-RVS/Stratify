@@ -1,9 +1,9 @@
-from order import Order, BuyOrder, SellOrder, CloseOrder, FillStatus
+from .order import Order, BuyOrder, SellOrder, CloseOrder, FillStatus
 from dataclasses import dataclass
 from datetime import datetime
-from data import TickerData
-from data import TickerFeed
-from data import Position
+from .data import TickerData
+from .data import TickerFeed
+from .data import Position
 from typing import Union
 import random
 

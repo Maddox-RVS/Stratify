@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from strategy import Strategy
+from .strategy import Strategy
 from datetime import datetime
-from broker import BrokerStandard
-from data import TickerData
-from data import TickerFeed
+from .broker import BrokerStandard
+from .data import TickerData
+from .data import TickerFeed
 import yfinance
 import pandas
 
