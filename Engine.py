@@ -39,7 +39,7 @@ class __Engine__():
     and running the backtest or live paper trading session.
     '''
 
-    def addTickerData(self, tickerFeed: TickerFeed):
+    def addTickerData(self, tickerFeed: TickerFeed) -> None:
         '''
         Adds a ticker feed to the engine.
 
@@ -48,7 +48,7 @@ class __Engine__():
 
         pass
 
-    def addStrategy(self, strategy: Strategy):
+    def addStrategy(self, strategy: Strategy) -> None:
         '''
         Adds a trading strategy to the engine.
 
@@ -102,7 +102,7 @@ class BacktestEngine(__Engine__):
         allLastDates: list[datetime] = [tickerFeed.getByLastDate() for tickerFeed in self.tickerFeeds]
         return max(allLastDates)
 
-    def addTickerData(self, tickerFeed: TickerFeed):
+    def addTickerData(self, tickerFeed: TickerFeed) -> None:
         '''
         Adds a ticker feed to the engine and updates the broker with the initial date.
 
@@ -113,7 +113,7 @@ class BacktestEngine(__Engine__):
         self.broker.__tickerFeeds__ = self.tickerFeeds
         self.broker.__dateTime__ = self.__getFirstDate__()
 
-    def addStrategy(self, strategy: Strategy):
+    def addStrategy(self, strategy: Strategy) -> None:
         '''
         Instantiates and adds a strategy to the engine.
 
@@ -129,7 +129,7 @@ class BacktestEngine(__Engine__):
 
         :return: A list of all strategies after completing the backtest.
         '''
-        
+
         for strategy in self.strategies: strategy.start()
 
         # Flattens all datetimes from all tickerfeeds into single list, then removes duplicates and sorts from smallest to largest

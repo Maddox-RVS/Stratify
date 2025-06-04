@@ -35,7 +35,7 @@ class Order():
         self.__boughtPrice__: Union[None, float] = None
         self.__sellPrice__: Union[None, float] = None
 
-    def cancel(self):
+    def cancel(self) -> None:
         '''
         Cancels the order by setting its status to CANCELLED.
         '''
@@ -84,5 +84,5 @@ class CloseOrder(Order):
         :param ticker: The stock ticker symbol.
         :param units: Placeholder value (will be overridden with full position units).
         '''
-        
+
         super().__init__(ticker, units)

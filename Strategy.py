@@ -22,7 +22,7 @@ class Strategy():
         self.high: Union[None, float] = None
         self.volume: Union[None, int] = None
 
-    def start(self):
+    def start(self) -> None:
         '''
         Called once before the strategy begins processing data.
         Intended to be overridden by custom strategies.
@@ -30,7 +30,7 @@ class Strategy():
 
         pass
 
-    def next(self):
+    def next(self) -> None:
         '''
         Called on every new data point (bar). Contains main strategy logic.
         Intended to be overridden by custom strategies.
@@ -38,7 +38,7 @@ class Strategy():
 
         pass
 
-    def end(self):
+    def end(self) -> None:
         '''
         Called once after all data has been processed.
         Intended to be overridden by custom strategies.

@@ -27,7 +27,7 @@ class BrokerStandard():
         self.__dateTime__: Union[None, datetime] = None
         self.__tickerFeeds__: list[TickerFeed] = []
 
-    def setCash(self, cashAmount: float):
+    def setCash(self, cashAmount: float) -> None:
         '''
         Sets the initial cash available in the broker.
 
@@ -36,7 +36,7 @@ class BrokerStandard():
 
         self.cash = cashAmount
 
-    def addCash(self, cashAmount: float):
+    def addCash(self, cashAmount: float) -> None:
         '''
         Adds cash to the broker account.
 
@@ -45,7 +45,7 @@ class BrokerStandard():
 
         self.cash += cashAmount
 
-    def setCommisionPercent(self, commisionPercent: float):
+    def setCommisionPercent(self, commisionPercent: float) -> None:
         '''
         Sets the commission percentage charged per trade.
 
@@ -99,7 +99,7 @@ class BrokerStandard():
                                                     if tickerData.dateTime == self.__dateTime__ and tickerData.ticker == ticker][0]
         return tickerInfo
     
-    def __closeOrder__(self, order: Order):
+    def __closeOrder__(self, order: Order) -> None:
         '''
         Moves an order from open to closed.
 
@@ -109,7 +109,7 @@ class BrokerStandard():
         self.__closedOrders__.append(order)
         self.__openOrders__.remove(order)
 
-    def __rejectOrder__(self, order: Order):
+    def __rejectOrder__(self, order: Order) -> None:
         '''
         Removes an order entirely. Order is not counted as closed.
 
@@ -118,7 +118,7 @@ class BrokerStandard():
 
         self.__openOrders__.remove(order)
 
-    def __executeBuyOrder__(self, tickerData: TickerData, order: Order):
+    def __executeBuyOrder__(self, tickerData: TickerData, order: Order) -> None:
         '''
         Executes a BuyOrder if sufficient cash and volume are available.
 
@@ -149,7 +149,7 @@ class BrokerStandard():
 
         self.__closeOrder__(order)
 
-    def __executeSellOrder__(self, tickerData: TickerData, order: Order):
+    def __executeSellOrder__(self, tickerData: TickerData, order: Order) -> None:
         '''
         Executes a SellOrder based on current holdings.
 
@@ -177,7 +177,7 @@ class BrokerStandard():
 
         self.__closeOrder__(order)
 
-    def __executeCloseOrder__(self, tickerData: TickerData, order: Order):
+    def __executeCloseOrder__(self, tickerData: TickerData, order: Order) -> None:
         '''
         Closes an open position by selling all units.
 
@@ -195,7 +195,7 @@ class BrokerStandard():
         order.units = position.units
         self.__executeSellOrder__(tickerData, order)
             
-    def __executeOrders__(self, tickerData: TickerData):
+    def __executeOrders__(self, tickerData: TickerData) -> None:
         '''
         Executes all open orders relevant to the provided ticker data.
 
