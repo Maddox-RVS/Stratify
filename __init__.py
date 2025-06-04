@@ -4,3 +4,4 @@ from .data import TickerFeed
 from .broker import BrokerStandard
 from .strategy import Strategy
 from .stats import StatisticTracker
+from .stats import StatID

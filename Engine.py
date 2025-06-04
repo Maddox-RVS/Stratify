@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from .stats import StatisticTracker
 from .strategy import Strategy
 from datetime import datetime
 from .broker import BrokerStandard
@@ -6,8 +7,7 @@ from .data import TickerData
 from .data import TickerFeed
 import yfinance
 import pandas
-
-import mystrat
+import copy
 
 def downloadData(ticker: str, start: datetime, end: datetime) -> TickerFeed:
     '''
@@ -63,11 +63,11 @@ class __Engine__(ABC):
         pass
 
     @abstractmethod
-    def run(self) -> list[Strategy]:
+    def run(self) -> None:
         '''
         Runs the trading engine, executing each strategy over the given market data.
 
-        :return: A list of strategies after execution.
+        :return: None.
         '''
 
         pass
@@ -120,7 +120,7 @@ class BacktestEngine(__Engine__):
         self.broker.__tickerFeeds__ = self.tickerFeeds
         self.broker.__dateTime__ = self.__getFirstDate__()
 
-    def addStrategy(self, strategy: Strategy) -> None:
+    def addStrategy(self, strategyClass: type[Strategy]) -> None:
         '''
         Instantiates and adds a strategy to the engine.
 
@@ -128,14 +128,18 @@ class BacktestEngine(__Engine__):
         :return: None
         '''
 
-        self.strategies.append(strategy())
+        self.strategies.append(strategyClass())
 
-    def run(self) -> list[Strategy]:
+    def addStatistic(self, statisticTrackerClass: type[StatisticTracker]) -> None:
+        for strategy in self.strategies:
+            strategy.__statisticsManager__.addStatisticTracker(statisticTrackerClass)
+
+    def run(self) -> None:
         '''
         Runs all added strategies on the historical data in chronological order.
         Simulates order execution using the broker.
 
-        :return: A list of all strategies after completing the backtest.
+        :return: None.
         '''
 
         allDateTimes: list[datetime] = []
@@ -172,9 +176,30 @@ class BacktestEngine(__Engine__):
                     self.broker.__openOrders__ += strategy.__orders__
                     strategy.__orders__.clear()
 
+                    strategy.__statisticsManager__.updateStatistics(strategy.ticker,
+                                                                    strategy.dateTime,
+                                                                    strategy.open,
+                                                                    strategy.close,
+                                                                    strategy.low,
+                                                                    strategy.high,
+                                                                    strategy.volume,
+                                                                    self.broker.cash,
+                                                                    self.broker.getPortfolioValue(),
+                                                                    self.broker.commissionPercent,
+                                                                    self.broker.slippagePercent,
+                                                                    copy.deepcopy(self.broker.__positions__),
+                                                                    copy.deepcopy(self.broker.__openOrders__) + copy.deepcopy(self.broker.__closedOrders__),
+                                                                    copy.deepcopy(self.broker.__openOrders__),
+                                                                    copy.deepcopy(self.broker.__closedOrders__))
+                    if not strategy.__statisticsManager__.hasStarted:
+                        strategy.__statisticsManager__.start()
+                        strategy.__statisticsManager__.hasStarted = True
+
                 self.broker.__executeOrders__(tickerData)
 
-        for strategy in self.strategies: strategy.end()
+                for strategy in self.strategies:
+                    strategy.end()
+                    strategy.__statisticsManager__.end()
 
 if __name__ == '__main__':
     data = []
@@ -189,8 +214,14 @@ if __name__ == '__main__':
 
     for d in data:
         backtestEngine.addTickerData(d)
-    
+        
+    from . import StatID
+
+    from . import mystrat
     backtestEngine.addStrategy(mystrat.MyStrategy)
+
+    from .stats.trackers import TotalReturnTracker
+    backtestEngine.addStatistic(TotalReturnTracker)
     
     backtestEngine.broker.setCash(10000)
 
@@ -201,3 +232,7 @@ if __name__ == '__main__':
     print(f'Open Orders: {len(backtestEngine.broker.__openOrders__)}')
     print(f'Closed Orders: {len(backtestEngine.broker.__closedOrders__)}')
     print(f'Final Portfolio Value: {backtestEngine.broker.getPortfolioValue()}')
+
+    for strategy in backtestEngine.strategies:
+        totalReturn: float = strategy.getStatistic(StatID.TOTAL_RETURN)
+        print(totalReturn)

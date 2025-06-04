@@ -1,4 +1,5 @@
 from .order import Order, BuyOrder, SellOrder, CloseOrder
+from .stats import StatisticsManager
 from datetime import datetime
 from typing import Union
 
@@ -20,6 +21,7 @@ class Strategy():
         self.high: Union[None, float] = None
         self.volume: Union[None, int] = None
 
+        self.__statisticsManager__: StatisticsManager = StatisticsManager()
         self.__orders__: list[Order] = []
         self.__hasStarted__: bool = False
 
@@ -88,3 +90,5 @@ class Strategy():
         self.__orders__.append(order)
         return order
     
+    def getStatistic(self, statisticID: str) -> any:
+        return self.__statisticsManager__.getStatistic(statisticID)
