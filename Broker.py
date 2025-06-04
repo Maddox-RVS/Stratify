@@ -5,6 +5,7 @@ from data import TickerData
 from data import TickerFeed
 from data import Position
 from typing import Union
+import random
 
 class BrokerStandard():
     '''
@@ -18,6 +19,7 @@ class BrokerStandard():
 
         self.cash: float = 0.0
         self.commissionPercent: float = 0.0
+        self.slippagePercent: float = 0.0
 
         self.__positions__: dict[str:Position] = {}
 
@@ -56,6 +58,20 @@ class BrokerStandard():
         '''
 
         self.commissionPercent = commisionPercent
+
+    def setSlippagePercent(self, slippagePercent: float) -> None:
+        '''
+        Sets the maximum slippage percentage to be applied during order execution.
+
+        Slippage simulates the difference between the expected price and the actual price
+        of an asset due to market conditions. The actual price used in trades will be 
+        adjusted randomly between 0% and this value.
+
+        :param slippagePercent: Maximum slippage as a decimal (e.g., 0.01 for 1%).
+        :return: None
+        '''
+        
+        self.slippagePercent = slippagePercent
 
     def getPosition(self, ticker) -> int:
         '''
@@ -134,15 +150,16 @@ class BrokerStandard():
 
         tickerVolume: int = tickerData.volume
         unitsNeeded: int = min(order.units, tickerVolume)
-        unitPrice: float = tickerData.close
+        randomSlippagePercent: float = (1 + random.uniform(0.0, self.slippagePercent))
+        unitPrice: float = tickerData.close * randomSlippagePercent
 
 
-        if (unitPrice + (unitPrice * self.commissionPercent)) > self.cash or self.cash <= 0.0 or tickerVolume < 1 or order.units < 1:
+        if (unitPrice * (1 + self.commissionPercent)) > self.cash or self.cash <= 0.0 or tickerVolume < 1 or order.units < 1:
             order.fillStatus = FillStatus.REJECTED
             self.__rejectOrder__(order)
             return
         
-        tangibleUnits: int = min(unitsNeeded, int(self.cash / (unitPrice + (unitPrice * self.commissionPercent))))
+        tangibleUnits: int = min(unitsNeeded, int(self.cash / (unitPrice * (1 + self.commissionPercent))))
         orderCost: float = unitPrice * tangibleUnits
         commisionCash: float = orderCost * self.commissionPercent
 
@@ -165,7 +182,8 @@ class BrokerStandard():
         '''
 
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
-        unitPrice: float = tickerData.close
+        randomSlippagePercent: float = (1 - random.uniform(0.0, self.slippagePercent))
+        unitPrice: float = tickerData.close * randomSlippagePercent
 
         if position.units == 0 or unitPrice == 0 or order.units < 1:
             order.fillStatus = FillStatus.REJECTED

@@ -82,6 +82,7 @@ class BacktestEngine(__Engine__):
         super().__init__()
         self.tickerFeeds: list[TickerFeed] = []
         self.strategies: list[Strategy] = []
+        self.
         self.broker: BrokerStandard = BrokerStandard()
 
     def __getFirstDate__(self) -> datetime:
