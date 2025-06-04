@@ -138,8 +138,6 @@ class BacktestEngine(__Engine__):
         :return: A list of all strategies after completing the backtest.
         '''
 
-        for strategy in self.strategies: strategy.start()
-
         allDateTimes: list[datetime] = []
         for tickerFeed in self.tickerFeeds:
             for tickerData in tickerFeed:
@@ -164,10 +162,15 @@ class BacktestEngine(__Engine__):
                     strategy.low = tickerData.low
                     strategy.high = tickerData.high
                     strategy.volume = tickerData.volume
+
+                    if not strategy.__hasStarted__:
+                        strategy.start()
+                        strategy.__hasStarted__ = True
+
                     strategy.next()
 
-                    self.broker.__openOrders__ += strategy.orders
-                    strategy.orders.clear()
+                    self.broker.__openOrders__ += strategy.__orders__
+                    strategy.__orders__.clear()
 
                 self.broker.__executeOrders__(tickerData)
 

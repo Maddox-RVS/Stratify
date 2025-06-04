@@ -12,8 +12,6 @@ class Strategy():
         Initializes a new strategy instance.
         '''
 
-        self.orders: list[Order] = []
-
         self.ticker: Union[None, str] = None
         self.dateTime: Union[None, datetime] = None
         self.open: Union[None, float] = None
@@ -21,6 +19,9 @@ class Strategy():
         self.low: Union[None, float] = None
         self.high: Union[None, float] = None
         self.volume: Union[None, int] = None
+
+        self.__orders__: list[Order] = []
+        self.__hasStarted__: bool = False
 
     def start(self) -> None:
         '''
@@ -61,7 +62,7 @@ class Strategy():
         '''
 
         order: BuyOrder = BuyOrder(self.ticker, units)
-        self.orders.append(order)
+        self.__orders__.append(order)
         return order
 
     def sell(self, units: int = 1) -> Order:
@@ -73,7 +74,7 @@ class Strategy():
         '''
 
         order: SellOrder = SellOrder(self.ticker, units)
-        self.orders.append(order)
+        self.__orders__.append(order)
         return order
 
     def close(self) -> Order:
@@ -84,6 +85,6 @@ class Strategy():
         '''
 
         order: CloseOrder = CloseOrder(self.ticker)
-        self.orders.append(order)
+        self.__orders__.append(order)
         return order
     
