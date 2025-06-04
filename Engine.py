@@ -138,7 +138,7 @@ class BacktestEngine(__Engine__):
 
         allDateTimes: list[datetime] = []
         for tickerFeed in self.tickerFeeds:
-            for tickerData in tickerFeed.feed:
+            for tickerData in tickerFeed:
                 allDateTimes.append(tickerData.dateTime)
         allDateTimes = sorted(set(allDateTimes))
 
@@ -147,11 +147,11 @@ class BacktestEngine(__Engine__):
 
             timestampTickerFeed: TickerFeed = TickerFeed()
             for tickerFeed in self.tickerFeeds:
-                for tickerData in tickerFeed.feed:
+                for tickerData in tickerFeed:
                     if tickerData.dateTime == dateTime:
-                        timestampTickerFeed.feed.append(tickerData)
+                        timestampTickerFeed.append(tickerData)
 
-            for tickerData in timestampTickerFeed.feed:
+            for tickerData in timestampTickerFeed:
                 for strategy in self.strategies:
                     strategy.ticker = tickerData.ticker
                     strategy.dateTime = tickerData.dateTime
@@ -164,8 +164,6 @@ class BacktestEngine(__Engine__):
 
                     self.broker.__openOrders__ += strategy.orders
                     strategy.orders.clear()
-
-                    print(tickerData.dateTime)
 
                 self.broker.__executeOrders__(tickerData)
 

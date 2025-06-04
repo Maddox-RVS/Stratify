@@ -98,11 +98,11 @@ class BrokerStandard():
 
         timestampTickerFeed: TickerFeed = TickerFeed()
         for tickerFeed in self.__tickerFeeds__:
-            for tickerData in tickerFeed.feed:
+            for tickerData in tickerFeed:
                 if tickerData.dateTime == self.__dateTime__:
-                    timestampTickerFeed.feed.append(tickerData)
+                    timestampTickerFeed.append(tickerData)
         
-        for tickerData in timestampTickerFeed.feed:
+        for tickerData in timestampTickerFeed:
             position: Position = self.__positions__.get(tickerData.ticker, Position(tickerData.ticker))
             value += tickerData.close * position.units
 
@@ -118,7 +118,7 @@ class BrokerStandard():
 
         tickerInfo: Union[None, TickerData] = None
         for tickerFeed in self.__tickerFeeds__:
-            for tickerData in tickerFeed.feed:
+            for tickerData in tickerFeed:
                 if tickerData.dateTime == self.__dateTime__ and tickerData.ticker == ticker:
                     tickerInfo = tickerData
                     break

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Iterator
 
 @dataclass
 class TickerData():
@@ -46,6 +47,25 @@ class TickerFeed():
         '''
 
         return len(self.feed)
+    
+    def __iter__(self) -> Iterator[TickerData]:
+        '''
+        Returns an iterator over the TickerData items in the feed.
+
+        :return: An iterator of TickerData objects.
+        '''
+
+        return iter(self.feed)
+    
+    def append(self, tickerData: TickerData) -> None:
+        '''
+        Appends a TickerData object to the feed.
+
+        :param tickerData: The TickerData object to append.
+        :return: None
+        '''
+        
+        self.feed.append(tickerData)
     
     def getByFirstDate(self) -> datetime:
         '''
