@@ -32,6 +32,7 @@ class BrokerStandard():
         Sets the initial cash available in the broker.
 
         :param cashAmount: The amount of cash to set.
+        :return: None
         '''
 
         self.cash = cashAmount
@@ -41,6 +42,7 @@ class BrokerStandard():
         Adds cash to the broker account.
 
         :param cashAmount: The amount of cash to add.
+        :return: None
         '''
 
         self.cash += cashAmount
@@ -50,6 +52,7 @@ class BrokerStandard():
         Sets the commission percentage charged per trade.
 
         :param commisionPercent: Commission as a decimal (e.g., 0.01 for 1%).
+        :return: None
         '''
 
         self.commissionPercent = commisionPercent
@@ -104,6 +107,7 @@ class BrokerStandard():
         Moves an order from open to closed.
 
         :param order: The order to close.
+        :return: None
         '''
 
         self.__closedOrders__.append(order)
@@ -114,6 +118,7 @@ class BrokerStandard():
         Removes an order entirely. Order is not counted as closed.
 
         :param order: The order to reject.
+        :return: None
         '''
 
         self.__openOrders__.remove(order)
@@ -124,6 +129,7 @@ class BrokerStandard():
 
         :param tickerData: The market data used for order execution.
         :param order: The BuyOrder to execute.
+        :return: None
         '''
 
         tickerVolume: int = tickerData.volume
@@ -155,6 +161,7 @@ class BrokerStandard():
 
         :param tickerData: The market data used for order execution.
         :param order: The SellOrder to execute.
+        :return: None
         '''
 
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
@@ -183,6 +190,7 @@ class BrokerStandard():
 
         :param tickerData: The market data used for order execution.
         :param order: The CloseOrder to execute.
+        :return: None
         '''
 
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
@@ -200,6 +208,7 @@ class BrokerStandard():
         Executes all open orders relevant to the provided ticker data.
 
         :param tickerData: The TickerData against which to match and execute orders.
+        :return: None
         '''
 
         for order in self.__openOrders__:

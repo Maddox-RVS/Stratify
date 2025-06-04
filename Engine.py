@@ -44,6 +44,7 @@ class __Engine__():
         Adds a ticker feed to the engine.
 
         :param tickerData: An object 'TickerFeed' which contains a feed of TickerData objects.
+        :return: None
         '''
 
         pass
@@ -53,6 +54,7 @@ class __Engine__():
         Adds a trading strategy to the engine.
 
         :param strategy: A strategy class that inherits from the Strategy base class.
+        :return: None
         '''
 
         pass
@@ -107,6 +109,7 @@ class BacktestEngine(__Engine__):
         Adds a ticker feed to the engine and updates the broker with the initial date.
 
         :param tickerFeed: A TickerFeed object containing historical market data.
+        :return: None
         '''
 
         self.tickerFeeds.append(tickerFeed)
@@ -118,6 +121,7 @@ class BacktestEngine(__Engine__):
         Instantiates and adds a strategy to the engine.
 
         :param strategy: A subclass of Strategy to be added and instantiated.
+        :return: None
         '''
 
         self.strategies.append(strategy())

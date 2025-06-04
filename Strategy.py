@@ -26,6 +26,8 @@ class Strategy():
         '''
         Called once before the strategy begins processing data.
         Intended to be overridden by custom strategies.
+
+        :return: None
         '''
 
         pass
@@ -34,6 +36,8 @@ class Strategy():
         '''
         Called on every new data point (bar). Contains main strategy logic.
         Intended to be overridden by custom strategies.
+
+        :return: None
         '''
 
         pass
@@ -42,6 +46,8 @@ class Strategy():
         '''
         Called once after all data has been processed.
         Intended to be overridden by custom strategies.
+
+        :return: None
         '''
 
         pass

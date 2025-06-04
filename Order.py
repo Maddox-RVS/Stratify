@@ -38,6 +38,8 @@ class Order():
     def cancel(self) -> None:
         '''
         Cancels the order by setting its status to CANCELLED.
+        
+        :return: None
         '''
 
         self.fillStatus = FillStatus.CANCELLED
