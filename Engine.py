@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from .stats import StatisticTracker
+from .broker import BrokerStandard
 from .strategy import Strategy
 from datetime import datetime
-from .broker import BrokerStandard
 from .data import TickerData
 from .data import TickerFeed
 import yfinance
@@ -149,6 +149,9 @@ class BacktestEngine(__Engine__):
         :return: None.
         '''
 
+        for strategy in self.strategies:
+            strategy.__addDefaultStatisticTrackers__()
+
         allDateTimes: list[datetime] = []
         for tickerFeed in self.tickerFeeds:
             for tickerData in tickerFeed:
@@ -226,9 +229,6 @@ if __name__ == '__main__':
 
     from . import mystrat
     backtestEngine.addStrategy(mystrat.MyStrategy)
-
-    from .stats.trackers import TotalReturnTracker
-    backtestEngine.addStatistic(TotalReturnTracker)
     
     backtestEngine.broker.setCash(10000)
 
@@ -241,5 +241,21 @@ if __name__ == '__main__':
     print(f'Final Portfolio Value: {backtestEngine.broker.getPortfolioValue()}')
 
     for strategy in backtestEngine.strategies:
+        for statistic in strategy.__statisticsManager__.__statisticTrackers__:
+            print(statistic.getStatsStr())
+
+    print()
+
+    for strategy in backtestEngine.strategies:
+        startingCash: float = strategy.getStatistic(StatID.STARTING_CASH)
+        annualizedReturn: float = strategy.getStatistic(StatID.ANNUALIZED_RETURN)
+        finalPortfolioValue: float = strategy.getStatistic(StatID.FINAL_PORTFOLIO_VALUE)
         totalReturn: float = strategy.getStatistic(StatID.TOTAL_RETURN)
-        print(totalReturn)
+        netProfitOrLoss: float = strategy.getStatistic(StatID.NET_PROFIT_OR_LOSS)
+
+        print('RAW NUMBERS:')
+        print(f'Starting Cash: ${startingCash}')
+        print(f'Annualized Return: {annualizedReturn}%')
+        print(f'Final Portfolio Value: ${finalPortfolioValue}')
+        print(f'Total Return: {totalReturn}%')
+        print(f'Net Profit/Loss: ${netProfitOrLoss}')

@@ -1,6 +1,7 @@
 from .order import Order, BuyOrder, SellOrder, CloseOrder
 from .stats import StatisticsManager
 from datetime import datetime
+from .stats import trackers
 from typing import Union
 
 class Strategy():
@@ -24,6 +25,14 @@ class Strategy():
         self.__statisticsManager__: StatisticsManager = StatisticsManager()
         self.__orders__: list[Order] = []
         self.__hasStarted__: bool = False
+
+    def __addDefaultStatisticTrackers__(self):
+        # Basic Performance Statistics
+        self.__statisticsManager__.addStatisticTracker(trackers.TotalReturnTracker)
+        self.__statisticsManager__.addStatisticTracker(trackers.AnnualizedReturnTracker)
+        self.__statisticsManager__.addStatisticTracker(trackers.StartingCashTracker)
+        self.__statisticsManager__.addStatisticTracker(trackers.FinalPortfolioValueTracker)
+        self.__statisticsManager__.addStatisticTracker(trackers.NetProfitOrLossTracker)
 
     def start(self) -> None:
         '''

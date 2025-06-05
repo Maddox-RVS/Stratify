@@ -4,15 +4,18 @@ class TotalReturnTracker(StatisticTracker):
     def __init__(self):
         super().__init__('total_return')
 
-        self.totalReturns: float = 0.0
+        self.totalReturn: float = 0.0
 
         self.__initialValue__: float = 0.0
 
     def start(self) -> None:
-        self.initialValue = self.portfolioValue
+        self.__initialValue__ = self.portfolioValue
 
     def end(self) -> None:
-        self.totalReturns = self.portfolioValue - self.initialValue
+        self.totalReturn = ((self.portfolioValue - self.__initialValue__) / self.__initialValue__) * 100.0
 
     def getStats(self) -> float:
-        return self.totalReturns
+        return self.totalReturn
+    
+    def getStatsStr(self) -> str:
+        return f'Total Return: {round(self.totalReturn, 2)}%'

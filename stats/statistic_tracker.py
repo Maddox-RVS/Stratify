@@ -125,7 +125,7 @@ class StatisticTracker():
 
         return None
 
-    def getStatsStr() -> str:
+    def getStatsStr(self) -> str:
         '''
         Returns a human-readable string representation of the tracked statistics.
         This string will be used in the statistics report string generation from the
@@ -134,4 +134,4 @@ class StatisticTracker():
         :return: A string summary of the tracked statistics.
         '''
 
-        return ''
+        return 'NONE'
