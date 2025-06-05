@@ -131,6 +131,13 @@ class BacktestEngine(__Engine__):
         self.strategies.append(strategyClass())
 
     def addStatistic(self, statisticTrackerClass: type[StatisticTracker]) -> None:
+        '''
+        Adds a statistic tracker class to the statistics manager of each strategy.
+
+        :param statisticTrackerClass: A class that inherits from StatisticTracker and will be used to track strategy statistics.
+        :return: None
+        '''
+        
         for strategy in self.strategies:
             strategy.__statisticsManager__.addStatisticTracker(statisticTrackerClass)
 

@@ -14,7 +14,7 @@ class BrokerStandard():
 
     def __init__(self):
         '''
-        Initializes the broker with default values for cash, commission, positions, and orders.
+        Initializes the broker.
         '''
 
         self.cash: float = 0.0

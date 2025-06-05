@@ -91,4 +91,11 @@ class Strategy():
         return order
     
     def getStatistic(self, statisticID: str) -> any:
+        '''
+        Retrieves a statistic by its ID from the strategy's statistics manager.
+
+        :param statisticID: The unique identifier of the statistic to retrieve.
+        :return: The value or object associated with the specified statistic ID.
+        '''
+        
         return self.__statisticsManager__.getStatistic(statisticID)
