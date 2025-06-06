@@ -13,3 +13,6 @@ class StatID():
     STARTING_CASH: str = 'starting_cash'
     FINAL_PORTFOLIO_VALUE: str = 'final_portfolio_value'
     NET_PROFIT_OR_LOSS: str = 'net_profit_or_loss'
+
+    # Drawdown statistics
+    MAX_DRAWDOWN: str = 'max_drawdown'

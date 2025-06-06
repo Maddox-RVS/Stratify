@@ -34,6 +34,9 @@ class Strategy():
         self.__statisticsManager__.addStatisticTracker(trackers.FinalPortfolioValueTracker)
         self.__statisticsManager__.addStatisticTracker(trackers.NetProfitOrLossTracker)
 
+        # Drawdown Statistics
+        self.__statisticsManager__.addStatisticTracker(trackers.Drawdown)
+
     def start(self) -> None:
         '''
         Called once before the strategy begins processing data.

@@ -255,9 +255,20 @@ if __name__ == '__main__':
         totalReturn: float = strategy.getStatistic(StatID.TOTAL_RETURN)
         netProfitOrLoss: float = strategy.getStatistic(StatID.NET_PROFIT_OR_LOSS)
 
+        from datetime import timedelta
+
+        maxDrawdownValue: float = strategy.getStatistic(StatID.MAX_DRAWDOWN)['value']
+        maxDrawdownPercent: float = strategy.getStatistic(StatID.MAX_DRAWDOWN)['percent']
+        drawdownDuration: timedelta = strategy.getStatistic(StatID.MAX_DRAWDOWN)['duration']
+
         print('RAW NUMBERS:')
         print(f'Starting Cash: ${startingCash}')
         print(f'Annualized Return: {annualizedReturn}%')
         print(f'Final Portfolio Value: ${finalPortfolioValue}')
         print(f'Total Return: {totalReturn}%')
         print(f'Net Profit/Loss: ${netProfitOrLoss}')
+
+        print('Drawdown:')
+        print(f'\t${maxDrawdownValue}')
+        print(f'\t{maxDrawdownPercent}%')
+        print(f'\t{drawdownDuration}')
