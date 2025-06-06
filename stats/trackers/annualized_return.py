@@ -29,7 +29,7 @@ class AnnualizedReturnTracker(StatisticTracker):
         if totalYears <= 0: self.annualizedReturn = 0.0
         else:
             cagr: float = (self.__finalValue__ / self.__initialValue__) ** (1 / totalYears)
-            self.annualizedReturn = cagr * 100
+            self.annualizedReturn = (cagr - 1) * 100
 
     def getStats(self) -> float:
         return self.annualizedReturn
