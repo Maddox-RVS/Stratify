@@ -36,7 +36,7 @@ class StatisticTracker():
         self.openOrders: list[Order] = []
         self.closedOrders: list[Order] = []
 
-    def __updateStatistics__(self, ticker: str,
+    def __updateStatisticsInfo__(self, ticker: str,
                                 dateTime: datetime,
                                 open: float,
                                 close: float,

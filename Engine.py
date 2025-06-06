@@ -186,7 +186,7 @@ class BacktestEngine(__Engine__):
                     self.broker.__openOrders__ += strategy.__orders__
                     strategy.__orders__.clear()
 
-                    strategy.__statisticsManager__.updateStatistics(strategy.ticker,
+                    strategy.__statisticsManager__.updateStatisticsInfo(strategy.ticker,
                                                                     strategy.dateTime,
                                                                     strategy.open,
                                                                     strategy.close,
@@ -204,6 +204,8 @@ class BacktestEngine(__Engine__):
                     if not strategy.__statisticsManager__.hasStarted:
                         strategy.__statisticsManager__.start()
                         strategy.__statisticsManager__.hasStarted = True
+
+                    strategy.__statisticsManager__.update()
 
                 self.broker.__executeOrders__(tickerData)
 

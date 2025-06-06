@@ -53,7 +53,21 @@ class StatisticsManager():
         for statisticTracker in self.__statisticTrackers__:
             statisticTracker.start()
 
-    def updateStatistics(self, ticker: str,
+    def update(self) -> None:
+        '''
+        Calls the `update` method on all registered StatisticTracker instances.
+
+        This method is intended to be called once per data point or time step to allow
+        each statistic tracker to update internal state or metrics that do not require
+        the full market/portfolio context provided by `updateStatisticsInfo`.
+
+        :return: None
+        '''
+        
+        for statisticTracker in self.__statisticTrackers__:
+            statisticTracker.update()
+
+    def updateStatisticsInfo(self, ticker: str,
                                 dateTime: datetime,
                                 open: float,
                                 close: float,
@@ -91,7 +105,7 @@ class StatisticsManager():
         '''
 
         for statisticTracker in self.__statisticTrackers__:
-            statisticTracker.__updateStatistics__(ticker, 
+            statisticTracker.__updateStatisticsInfo__(ticker, 
                                                 dateTime,
                                                 open,
                                                 close,
