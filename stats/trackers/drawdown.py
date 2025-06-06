@@ -5,6 +5,12 @@ from typing import Union
 import os
 
 class Drawdown(StatisticTracker):
+    HOURS_IN_DAY: int = 24
+    MINS_IN_HOUR: int = 60
+    SECS_IN_MIN: int = 60
+    SECS_IN_DAY: int = SECS_IN_MIN * MINS_IN_HOUR * HOURS_IN_DAY
+    SECS_IN_HOUR: int = SECS_IN_MIN * MINS_IN_HOUR
+
     def __init__(self):
         super().__init__('max_drawdown')
 
@@ -67,22 +73,16 @@ class Drawdown(StatisticTracker):
         return {'value': self.maxDrawdownValue, 'percent': self.maxDrawdownPercent, 'duration': self.drawdownDuration}
 
     def getStatsStr(self) -> str:
-        hoursInDay: int = 24
-        minsInHour: int = 60
-        secondsInMin: int = 60
-        secondsInDay: int = secondsInMin * minsInHour * hoursInDay
-        secondsInHour: int = secondsInMin * minsInHour
-
         totalSeconds: float = self.drawdownDuration.total_seconds()
 
         days: int = self.drawdownDuration.days
-        totalSeconds -= days * secondsInDay
+        totalSeconds -= days * Drawdown.SECS_IN_DAY
 
-        hours: int = int(totalSeconds // secondsInHour)
-        totalSeconds -= hours * secondsInHour
+        hours: int = int(totalSeconds // Drawdown.SECS_IN_HOUR)
+        totalSeconds -= hours * Drawdown.SECS_IN_HOUR
 
-        minutes: int = int(totalSeconds // secondsInMin)
-        totalSeconds -=  minutes * secondsInMin
+        minutes: int = int(totalSeconds // Drawdown.SECS_IN_MIN)
+        totalSeconds -=  minutes * Drawdown.SECS_IN_MIN
 
         seconds: float = round(totalSeconds, 3)
 
