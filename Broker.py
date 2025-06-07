@@ -135,6 +135,7 @@ class BrokerStandard():
         :return: None
         '''
 
+        order.__closedEndTime__ = datetime.now()
         self.__closedOrders__.append(order)
         self.__openOrders__.remove(order)
 
@@ -173,7 +174,9 @@ class BrokerStandard():
         commisionCash: float = orderCost * self.commissionPercent
 
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
-        self.cash -= (orderCost + commisionCash)
+        tradeValue: float = orderCost + commisionCash
+        self.cash -= tradeValue
+        order.__boughtPrice__ = tradeValue
         position.units += tangibleUnits
         self.__positions__[order.ticker] = position
 
@@ -204,6 +207,7 @@ class BrokerStandard():
         commissionCash: float = sellValue * self.commissionPercent
         netCashReceived = sellValue - commissionCash
         self.cash += netCashReceived
+        order.__sellPrice__ = netCashReceived
         position.units -= unitsToSell
         self.__positions__[order.ticker] = position
 
