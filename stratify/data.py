@@ -48,6 +48,25 @@ class TickerFeed():
 
         return len(self.feed)
     
+    def __eq__(self, other) -> bool:
+        '''
+        Compares this TickerFeed with another for equality.
+
+        :param other: The other TickerFeed to compare with.
+        :return: True if both feeds contain the same TickerData items in the same order, False otherwise.
+        '''
+
+        if isinstance(other, TickerFeed):
+            for tickerData, tickerDataOther in zip(self.feed, other.feed):
+                if tickerData != tickerDataOther:
+                    return False
+                
+            if len(self.feed) != len(other.feed):
+                return False
+            
+            return True
+        return False
+    
     def __iter__(self) -> Iterator[TickerData]:
         '''
         Returns an iterator over the TickerData items in the feed.
