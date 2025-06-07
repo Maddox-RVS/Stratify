@@ -10,17 +10,14 @@ class AnnualizedReturnTracker(StatisticTracker):
 
         self.annualizedReturn: float = 0.0
 
-        self.__initialValue__: float = 0.0
-        self.__finalValue__: float = 0.0
         self.__startDate__: Union[None, datetime] = None
         self.__endDate__: Union[None, datetime] = None
 
     def start(self) -> None:
-        self.__initialValue__ = self.portfolioValue
         self.__startDate__ = self.dateTime
 
     def end(self) -> None:
-        self.__finalValue__ = self.__initialValue__ + self.ssNetValueProfitOrLoss
+        self.ssFinalValue = self.ssCurrentValue
         self.__endDate__ = self.dateTime
 
         totalDays: int = (self.__endDate__ - self.__startDate__).days
@@ -28,7 +25,7 @@ class AnnualizedReturnTracker(StatisticTracker):
 
         if totalYears <= 0: self.annualizedReturn = 0.0
         else:
-            cagr: float = (self.__finalValue__ / self.__initialValue__) ** (1 / totalYears)
+            cagr: float = (self.ssFinalValue / self.startingValue) ** (1 / totalYears)
             self.annualizedReturn = (cagr - 1) * 100
 
     def getStats(self) -> float:

@@ -6,15 +6,10 @@ class TotalReturnTracker(StatisticTracker):
 
         self.totalReturn: float = 0.0
 
-        self.__initialValue__: float = 0.0
-
-    def start(self) -> None:
-        self.__initialValue__ = self.portfolioValue
-
     def end(self) -> None:
-        finalValue: float = self.__initialValue__ + self.ssNetValueProfitOrLoss
+        finalValue: float = self.ssCurrentValue
 
-        self.totalReturn = ((finalValue - self.__initialValue__) / self.__initialValue__) * 100.0
+        self.totalReturn = ((finalValue - self.startingCash) / self.startingCash) * 100.0
 
     def getStats(self) -> float:
         return self.totalReturn

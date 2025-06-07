@@ -20,6 +20,8 @@ class StatisticTracker():
 
         self.statisticID: str = statisticID
 
+        self.startingCash: Union[None, float] = None
+        self.startingValue: Union[None, float] = None
         self.ticker: Union[None, str] = None
         self.dateTime: Union[None, datetime] = None
         self.open: Union[None, float] = None
@@ -37,6 +39,7 @@ class StatisticTracker():
         self.closedOrders: list[Order] = []
         self.ssNetCashProfitOrLoss: float = 0.0 
         self.ssNetValueProfitOrLoss: float = 0.0
+        self.ssCurrentValue: Union[None, float] = None
 
     def __updateStatisticsInfo__(self, ticker: str,
                                 dateTime: datetime,
@@ -78,6 +81,14 @@ class StatisticTracker():
 
         :return: None
         '''
+
+        if not self.startingCash:
+            self.startingCash = portfolioCash
+
+        self.ssCurrentValue = self.startingCash + ssNetValueProfitOrLoss
+
+        if not self.startingValue:
+            self.startingValue = self.ssCurrentValue
 
         self.ticker = ticker
         self.dateTime = dateTime
