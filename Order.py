@@ -30,10 +30,11 @@ class Order():
         self.units: int = units
         self.fillStatus: FillStatus = FillStatus.PENDING
 
-        self.__opened__: Union[None, datetime] = None
-        self.__closed__: Union[None, datetime] = None
         self.__boughtPrice__: Union[None, float] = None
         self.__sellPrice__: Union[None, float] = None
+
+        self.__openedStartTime__: datetime = datetime.now()
+        self.__closedEndTime__: Union[None, datetime] = None
 
     def cancel(self) -> None:
         '''
