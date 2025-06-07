@@ -48,6 +48,29 @@ class TickerFeed():
 
         return len(self.feed)
     
+    def __str__(self) -> str:
+        '''
+        Returns a string representation of the TickerFeed.
+
+        :return: A string representation of the TickerFeed.
+        '''
+
+        result: str = f'TickerFeed:{{{self.feed[0]} ... {len(self.feed) - 2} others ... {self.feed[-1]}}}'
+        if len(self.feed) == 2: result = f'TickerFeed:{{{self.feed[0]}, {self.feed[1]}}}'
+        if len(self.feed) == 1: result = f'TickerFeed:{{{self.feed[0]}}}'
+        if len(self.feed) == 0: result = 'TickerFeed:{{Empty}}'
+
+        return result
+    
+    def __repr__(self) -> str:
+        '''
+        Returns a string representation of the TickerFeed.
+
+        :return: A string representation of the TickerFeed.
+        '''
+
+        return self.__str__()
+    
     def __eq__(self, other) -> bool:
         '''
         Compares this TickerFeed with another for equality.
