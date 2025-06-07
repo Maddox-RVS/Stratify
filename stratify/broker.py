@@ -49,7 +49,7 @@ class BrokerStandard():
 
         self.cash += cashAmount
 
-    def setCommisionPercent(self, commisionPercent: float) -> None:
+    def setCommissionPercent(self, commisionPercent: float) -> None:
         '''
         Sets the commission percentage charged per trade.
 

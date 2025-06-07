@@ -41,7 +41,7 @@ class __Engine__(ABC):
     '''
 
     @abstractmethod
-    def addTickerData(self, tickerFeed: TickerFeed) -> None:
+    def addTickerFeed(self, tickerFeed: TickerFeed) -> None:
         '''
         Adds a ticker feed to the engine.
 
@@ -108,7 +108,7 @@ class BacktestEngine(__Engine__):
         allLastDates: list[datetime] = [tickerFeed.getByLastDate() for tickerFeed in self.tickerFeeds]
         return max(allLastDates)
 
-    def addTickerData(self, tickerFeed: TickerFeed) -> None:
+    def addTickerFeed(self, tickerFeed: TickerFeed) -> None:
         '''
         Adds a ticker feed to the engine and updates the broker with the initial date.
 
@@ -213,63 +213,3 @@ class BacktestEngine(__Engine__):
         for strategy in self.strategies:
             strategy.end()
             strategy.__statisticsManager__.end()
-
-if __name__ == '__main__':
-    data = []
-    data.append(downloadData('AAPL', datetime(2000, 1, 1), datetime(2024, 1, 1)))
-    data.append(downloadData('META', datetime(2000, 1, 1), datetime(2024, 1, 1)))
-    data.append(downloadData('GOOG', datetime(2000, 1, 1), datetime(2024, 1, 1)))
-    data.append(downloadData('NVDA', datetime(2000, 1, 1), datetime(2024, 1, 1)))
-    data.append(downloadData('MSFT', datetime(2000, 1, 1), datetime(2024, 1, 1)))
-    data.append(downloadData('TSLA', datetime(2000, 1, 1), datetime(2024, 1, 1)))
-
-    backtestEngine = BacktestEngine()
-
-    for d in data:
-        backtestEngine.addTickerData(d)
-        
-    from . import StatID
-
-    from . import mystrat
-    backtestEngine.addStrategy(mystrat.MyStrategy)
-    
-    backtestEngine.broker.setCash(10000)
-
-    print(f'Starting Portfolio Value: {backtestEngine.broker.getPortfolioValue()}')
-    
-    backtestEngine.run()
-    
-    print(f'Open Orders: {len(backtestEngine.broker.__openOrders__)}')
-    print(f'Closed Orders: {len(backtestEngine.broker.__closedOrders__)}')
-    print(f'Final Portfolio Value: {backtestEngine.broker.getPortfolioValue()}')
-
-    for strategy in backtestEngine.strategies:
-        for statistic in strategy.__statisticsManager__.__statisticTrackers__:
-            print(statistic.getStatsStr())
-
-    print()
-
-    for strategy in backtestEngine.strategies:
-        startingCash: float = strategy.getStatistic(StatID.STARTING_CASH)
-        annualizedReturn: float = strategy.getStatistic(StatID.ANNUALIZED_RETURN)
-        finalPortfolioValue: float = strategy.getStatistic(StatID.FINAL_PORTFOLIO_VALUE)
-        totalReturn: float = strategy.getStatistic(StatID.TOTAL_RETURN)
-        netProfitOrLoss: float = strategy.getStatistic(StatID.NET_PROFIT_OR_LOSS)
-
-        from datetime import timedelta
-
-        maxDrawdownValue: float = strategy.getStatistic(StatID.MAX_DRAWDOWN)['value']
-        maxDrawdownPercent: float = strategy.getStatistic(StatID.MAX_DRAWDOWN)['percent']
-        drawdownDuration: timedelta = strategy.getStatistic(StatID.MAX_DRAWDOWN)['duration']
-
-        print('RAW NUMBERS:')
-        print(f'Starting Cash: ${startingCash}')
-        print(f'Annualized Return: {annualizedReturn}%')
-        print(f'Final Portfolio Value: ${finalPortfolioValue}')
-        print(f'Total Return: {totalReturn}%')
-        print(f'Net Profit/Loss: ${netProfitOrLoss}')
-
-        print('Drawdown:')
-        print(f'\t${maxDrawdownValue}')
-        print(f'\t{maxDrawdownPercent}%')
-        print(f'\t{drawdownDuration}')
