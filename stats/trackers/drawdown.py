@@ -25,10 +25,14 @@ class Drawdown(StatisticTracker):
         self.__peakIndex__: Union[None, int] = None
         self.__drawdownStartTime__: Union[None, datetime] = None
 
+        self.__initialValue__: float = 0.0
+
     def start(self) -> None:
         self.__peak__ = self.portfolioValue
         self.__peakIndex__ = 0
         self.__drawdownStartTime__ = self.dateTime
+
+        self.__initialValue__ = self.portfolioValue
 
     def __calculateDrawdown__(self, drawdownIndexOffest: int = 2) -> None:
         drawdownEndTime: datetime = self.dateTime
@@ -47,17 +51,21 @@ class Drawdown(StatisticTracker):
             self.__drawdowns__.append((drawdownValue, drawdownPercent, drawdownDuration))
 
     def update(self) -> None:
-        self.__portfolioValues__.append(self.portfolioValue)
+        currentStrategySpecificValue: float = self.__initialValue__ + self.ssNetValueProfitOrLoss
 
-        if self.portfolioValue > self.__peak__:
+        self.__portfolioValues__.append(currentStrategySpecificValue)
+
+        if currentStrategySpecificValue > self.__peak__:
             self.__calculateDrawdown__()
 
-            self.__peak__ = self.portfolioValue
+            self.__peak__ = currentStrategySpecificValue
             self.__peakIndex__ = len(self.__portfolioValues__) - 1
             self.__drawdownStartTime__ = self.dateTime
 
     def end(self) -> None:
-        if self.portfolioValue < self.__peak__:
+        currentStrategySpecificValue: float = self.__initialValue__ + self.ssNetValueProfitOrLoss
+
+        if currentStrategySpecificValue < self.__peak__:
             self.__calculateDrawdown__(drawdownIndexOffest=1)
 
         drawdownValues: list[float] = [drawdown[0] for drawdown in self.__drawdowns__]

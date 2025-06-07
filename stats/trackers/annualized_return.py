@@ -20,7 +20,7 @@ class AnnualizedReturnTracker(StatisticTracker):
         self.__startDate__ = self.dateTime
 
     def end(self) -> None:
-        self.__finalValue__ = self.portfolioValue
+        self.__finalValue__ = self.__initialValue__ + self.ssNetValueProfitOrLoss
         self.__endDate__ = self.dateTime
 
         totalDays: int = (self.__endDate__ - self.__startDate__).days
