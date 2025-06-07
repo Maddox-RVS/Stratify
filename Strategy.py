@@ -77,6 +77,7 @@ class Strategy():
 
         order: BuyOrder = BuyOrder(self.ticker, units)
         self.__orders__.append(order)
+        self.__statisticsManager__.strategyOrdersMade.append(order)
         return order
 
     def sell(self, units: int = 1) -> Order:
@@ -89,6 +90,7 @@ class Strategy():
 
         order: SellOrder = SellOrder(self.ticker, units)
         self.__orders__.append(order)
+        self.__statisticsManager__.strategyOrdersMade.append(order)
         return order
 
     def close(self) -> Order:
@@ -100,6 +102,7 @@ class Strategy():
 
         order: CloseOrder = CloseOrder(self.ticker)
         self.__orders__.append(order)
+        self.__statisticsManager__.strategyOrdersMade.append(order)
         return order
     
     def getStatistic(self, statisticID: str) -> any:

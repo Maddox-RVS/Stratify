@@ -108,25 +108,6 @@ class BrokerStandard():
 
         return value
     
-    def __getTickerInfo__(self, ticker: str) -> TickerData:
-        '''
-        Retrieves TickerData for the given ticker at the current broker datetime.
-
-        :param ticker: The stock ticker symbol.
-        :return: The matching TickerData object.
-        '''
-
-        tickerInfo: Union[None, TickerData] = None
-        for tickerFeed in self.__tickerFeeds__:
-            for tickerData in tickerFeed:
-                if tickerData.dateTime == self.__dateTime__ and tickerData.ticker == ticker:
-                    tickerInfo = tickerData
-                    break
-            if tickerInfo != None:
-                break               
-
-        return tickerInfo
-    
     def __closeOrder__(self, order: Order) -> None:
         '''
         Moves an order from open to closed.
@@ -176,7 +157,7 @@ class BrokerStandard():
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
         tradeValue: float = orderCost + commisionCash
         self.cash -= tradeValue
-        order.__boughtPrice__ = tradeValue
+        order.__portfolioCashImpact__ = (-1.0 * tradeValue)
         position.units += tangibleUnits
         self.__positions__[order.ticker] = position
 
@@ -207,7 +188,7 @@ class BrokerStandard():
         commissionCash: float = sellValue * self.commissionPercent
         netCashReceived = sellValue - commissionCash
         self.cash += netCashReceived
-        order.__sellPrice__ = netCashReceived
+        order.__portfolioCashImpact__ = netCashReceived
         position.units -= unitsToSell
         self.__positions__[order.ticker] = position
 

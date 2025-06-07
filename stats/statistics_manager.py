@@ -1,7 +1,11 @@
 from .statistic_tracker import StatisticTracker
+from ..order import FillStatus
 from datetime import datetime
+from ..data import TickerData
+from ..data import TickerFeed
 from ..data import Position
 from ..order import Order
+from typing import Union
 
 class StatisticsManager():
     '''
@@ -11,15 +15,29 @@ class StatisticsManager():
     and for aggregating statistics retrieval by ID.
     '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         '''
         Initializes the StatisticsManager with an empty tracker list and a start flag.
 
         :return: None
         '''
 
-        self.__statisticTrackers__: list[StatisticTracker] = []
         self.hasStarted: bool = False
+        self.strategyOrdersMade: list[Order] = []
+
+        self.__dateTime__: Union[None, datetime] = None
+        self.__tickerFeeds__: Union[None, list[TickerFeed]] = None
+        self.__statisticTrackers__: list[StatisticTracker] = []
+
+    def setTickerFeeds(self, tickerFeeds: list[TickerFeed]) -> None:
+        '''
+        Sets the list of TickerFeed instances for the manager.
+
+        :param tickerFeeds: List of TickerFeed instances to set.
+        :return: None
+        '''
+
+        self.__tickerFeeds__ = tickerFeeds
 
     def addStatisticTracker(self, statisticTrackerClass: type[StatisticTracker]) -> None:
         '''
@@ -67,6 +85,61 @@ class StatisticsManager():
         for statisticTracker in self.__statisticTrackers__:
             statisticTracker.update()
 
+    def __getTickerInfo__(self, ticker: str) -> TickerData:
+        '''
+        Retrieves TickerData for the given ticker at the current broker datetime.
+
+        :param ticker: The stock ticker symbol.
+        :return: The matching TickerData object.
+        '''
+
+        tickerInfo: Union[None, TickerData] = None
+        for tickerFeed in self.__tickerFeeds__:
+            for tickerData in tickerFeed:
+                if tickerData.dateTime == self.__dateTime__ and tickerData.ticker == ticker:
+                    tickerInfo = tickerData
+                    break
+            if tickerInfo != None:
+                break               
+
+        return tickerInfo
+
+    def __calculateStrategyNetCashProfitOrLoss__(self) -> float:
+        '''
+        Calculates the net cash profit or loss for the strategy based on all orders made by the strategy.
+
+        :return: The net cash profit or loss as a float.
+        '''
+
+        netCashProfitOrLoss: float = 0.0
+        for order in self.strategyOrdersMade:
+            if order.fillStatus in (FillStatus.FILLED, FillStatus.PARTIALLY_FILLED):
+                netCashProfitOrLoss += order.__portfolioCashImpact__
+        return netCashProfitOrLoss
+    
+    def __calculateStrategyNetValueProfitOrLoss__(self) -> float:
+        '''
+        Calculates the net value profit or loss for the strategy, including cash and positions.
+
+        :return: The net value profit or loss as a float.
+        '''
+
+        netValueProfitOrLoss: float = self.__calculateStrategyNetCashProfitOrLoss__()
+        strategyPositions: list[Position] = []
+        for order in self.strategyOrdersMade:
+            if order.fillStatus in (FillStatus.FILLED, FillStatus.PARTIALLY_FILLED):
+                strategyPositions.append(Position(order.ticker, order.units))
+        for position in strategyPositions:
+            positionTicker: str = position.ticker
+            positionUnits: int = position.units
+
+            tickerData: TickerData = self.__getTickerInfo__(positionTicker)
+            positionCashValue: float = tickerData.close * positionUnits
+
+            netValueProfitOrLoss += positionCashValue
+
+        return netValueProfitOrLoss
+
     def updateStatisticsInfo(self, ticker: str,
                                 dateTime: datetime,
                                 open: float,
@@ -104,6 +177,8 @@ class StatisticsManager():
         :return: None
         '''
 
+        self.__dateTime__ = dateTime
+
         for statisticTracker in self.__statisticTrackers__:
             statisticTracker.__updateStatisticsInfo__(ticker, 
                                                 dateTime,
@@ -119,7 +194,9 @@ class StatisticsManager():
                                                 positions,
                                                 orders,
                                                 openOrders,
-                                                closedOrders)
+                                                closedOrders,
+                                                self.__calculateStrategyNetCashProfitOrLoss__(),
+                                                self.__calculateStrategyNetValueProfitOrLoss__())
             
     def end(self) -> None:
         '''

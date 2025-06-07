@@ -30,9 +30,8 @@ class Order():
         self.units: int = units
         self.fillStatus: FillStatus = FillStatus.PENDING
 
-        self.__boughtPrice__: Union[None, float] = None
-        self.__sellPrice__: Union[None, float] = None
 
+        self.__portfolioCashImpact__: float = 0.0
         self.__openedStartTime__: datetime = datetime.now()
         self.__closedEndTime__: Union[None, datetime] = None
 

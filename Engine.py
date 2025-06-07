@@ -150,6 +150,7 @@ class BacktestEngine(__Engine__):
         '''
 
         for strategy in self.strategies:
+            strategy.__statisticsManager__.setTickerFeeds(self.tickerFeeds)
             strategy.__addDefaultStatisticTrackers__()
 
         allDateTimes: list[datetime] = []

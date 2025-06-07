@@ -35,6 +35,8 @@ class StatisticTracker():
         self.orders: list[Order] = []
         self.openOrders: list[Order] = []
         self.closedOrders: list[Order] = []
+        self.ssNetCashProfitOrLoss: float = 0.0 
+        self.ssNetValueProfitOrLoss: float = 0.0
 
     def __updateStatisticsInfo__(self, ticker: str,
                                 dateTime: datetime,
@@ -50,7 +52,9 @@ class StatisticTracker():
                                 positions: dict[str:Position],
                                 orders: list[Order],
                                 openOrders: list[Order],
-                                closedOrders: list[Order]) -> None:
+                                closedOrders: list[Order],
+                                ssNetCashProfitOrLoss: float,
+                                ssNetValueProfitOrLoss: float) -> None:
         '''
         Internal method to update the current market and portfolio state for the statistic tracker.
 
@@ -69,7 +73,9 @@ class StatisticTracker():
         :param orders: The list of all orders issued during this time step.
         :param openOrders: The list of currently open orders.
         :param closedOrders: The list of closed orders.
-        
+        :param ssNetCashProfitOrLoss: The net profit or loss from the trades executed by this specific strategy being tracked.
+        :param ssNetValueProfitOrLoss: The net profit or loss from the value of the positions held by this specific strategy being tracked.
+
         :return: None
         '''
 
@@ -88,6 +94,8 @@ class StatisticTracker():
         self.orders = orders
         self.openOrders = openOrders
         self.closedOrders = closedOrders
+        self.ssNetCashProfitOrLoss = ssNetCashProfitOrLoss
+        self.ssNetValueProfitOrLoss = ssNetValueProfitOrLoss
 
     def start(self) -> None:
         '''
