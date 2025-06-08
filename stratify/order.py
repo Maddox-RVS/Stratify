@@ -30,8 +30,10 @@ class Order():
         self.units: int = units
         self.fillStatus: FillStatus = FillStatus.PENDING
 
+        # Net impact on the total cash in the portfolio this order has
+        self._portfolioCashImpact: float = 0.0
 
-        self.__portfolioCashImpact__: float = 0.0
+        # Used to determine deltatime for how long order was open for
         self.__openedStartTime__: datetime = datetime.now()
         self.__closedEndTime__: Union[None, datetime] = None
 
