@@ -93,7 +93,7 @@ class Strategy():
         self.__statisticsManager__.strategyOrdersMade.append(order)
         return order
 
-    def close(self) -> Order:
+    def closePosition(self) -> Order:
         '''
         Closes the current position by placing a CloseOrder.
 
