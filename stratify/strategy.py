@@ -35,7 +35,10 @@ class Strategy():
         self.__statisticsManager__.addStatisticTracker(trackers.NetProfitOrLossTracker)
 
         # Drawdown Statistics
-        self.__statisticsManager__.addStatisticTracker(trackers.Drawdown)
+        self.__statisticsManager__.addStatisticTracker(trackers.DrawdownTracker)
+
+        # Trade Statistics
+        self.__statisticsManager__.addStatisticTracker(trackers.TradesTracker)
 
     def start(self) -> None:
         '''

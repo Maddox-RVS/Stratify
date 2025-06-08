@@ -6,4 +6,7 @@ from .final_portfolio_value import FinalPortfolioValueTracker
 from .net_profit_or_loss import NetProfitOrLossTracker
 
 # Drawdown Statistics
-from .drawdown import Drawdown
+from .drawdown import DrawdownTracker
+
+# Trade Statistics
+from .trades import TradesTracker

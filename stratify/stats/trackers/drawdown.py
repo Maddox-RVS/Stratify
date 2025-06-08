@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Union
 import os
 
-class Drawdown(StatisticTracker):
+class DrawdownTracker(StatisticTracker):
     HOURS_IN_DAY: int = 24
     MINS_IN_HOUR: int = 60
     SECS_IN_MIN: int = 60
@@ -76,13 +76,13 @@ class Drawdown(StatisticTracker):
         totalSeconds: float = self.drawdownDuration.total_seconds()
 
         days: int = self.drawdownDuration.days
-        totalSeconds -= days * Drawdown.SECS_IN_DAY
+        totalSeconds -= days * DrawdownTracker.SECS_IN_DAY
 
-        hours: int = int(totalSeconds // Drawdown.SECS_IN_HOUR)
-        totalSeconds -= hours * Drawdown.SECS_IN_HOUR
+        hours: int = int(totalSeconds // DrawdownTracker.SECS_IN_HOUR)
+        totalSeconds -= hours * DrawdownTracker.SECS_IN_HOUR
 
-        minutes: int = int(totalSeconds // Drawdown.SECS_IN_MIN)
-        totalSeconds -=  minutes * Drawdown.SECS_IN_MIN
+        minutes: int = int(totalSeconds // DrawdownTracker.SECS_IN_MIN)
+        totalSeconds -=  minutes * DrawdownTracker.SECS_IN_MIN
 
         seconds: float = round(totalSeconds, 3)
 

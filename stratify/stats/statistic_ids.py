@@ -16,3 +16,6 @@ class StatID():
 
     # Drawdown statistics
     MAX_DRAWDOWN: str = 'max_drawdown'
+
+    # Trade Statistics
+    TRADES: str = 'trades'
