@@ -6,6 +6,7 @@ from ..data import TickerFeed
 from ..data import Position
 from ..order import Order
 from typing import Union
+import copy
 
 class StatisticsManager():
     '''
@@ -196,7 +197,8 @@ class StatisticsManager():
                                                 openOrders,
                                                 closedOrders,
                                                 self.__calculateStrategyNetCashProfitOrLoss__(),
-                                                self.__calculateStrategyNetValueProfitOrLoss__())
+                                                self.__calculateStrategyNetValueProfitOrLoss__(),
+                                                copy.deepcopy(self.strategyOrdersMade))
             
     def end(self) -> None:
         '''
