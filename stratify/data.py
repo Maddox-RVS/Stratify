@@ -1,28 +1,48 @@
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Iterator
 
-@dataclass
 class TickerData():
-    '''
-    Represents a single bar of market data for a specific ticker and timestamp.
+    def __init__(self, ticker: str, dateTime: datetime, open: float, close: float, low: float, high: float, volume: int):
+        '''
+        Initializes a TickerData object with the provided parameters.
 
-    :param ticker: The stock ticker symbol.
-    :param dateTime: The date and time of the market data point.
-    :param open: The opening price.
-    :param close: The closing price.
-    :param low: The lowest price of the bar.
-    :param high: The highest price of the bar.
-    :param volume: The trading volume.
-    '''
+        :param ticker: The stock ticker symbol.
+        :param dateTime: The date and time of the market data point.
+        :param open: The opening price.
+        :param close: The closing price.
+        :param low: The lowest price of the bar.
+        :param high: The highest price of the bar.
+        :param volume: The trading volume.
+        '''
 
-    ticker: str
-    dateTime: datetime
-    open: float
-    close: float
-    low: float
-    high: float
-    volume: int
+        self.ticker = ticker
+        self.dateTime = dateTime
+        self.open = open
+        self.close = close
+        self.low = low
+        self.high = high
+        self.volume = volume
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, TickerData):
+            return (self.ticker == other.ticker and
+                    self.dateTime == other.dateTime and
+                    round(self.open, 3) == round(other.open, 3) and
+                    round(self.close, 3) == round(other.close, 3) and
+                    round(self.low, 3) == round(other.low, 3) and
+                    round(self.high, 3) == round(other.high, 3) and
+                    self.volume == other.volume)
+        return False
+    
+    def __str__(self) -> str:
+        return (f'TickerData(ticker={self.ticker}, ',
+                f'dateTime={self.dateTime.strftime("%Y-%m-%d %H:%M:%S")}, ',
+                f'open={self.open:.2f}, close={self.close:.2f}, ',
+                f'low={self.low:.2f}, high={self.high:.2f}, ',
+                f'volume={self.volume})')
+    
+    def __repr__(self) -> str:
+        return self.__str__()
 
 class TickerFeed():
     '''
