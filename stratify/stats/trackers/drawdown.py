@@ -89,4 +89,4 @@ class Drawdown(StatisticTracker):
         return (f'Drawdown Statistics:\n'
                 f'   Max Drawdown: ${round(self.maxDrawdownValue, 2):,.2f}\n'
                 f'   Max Drawdown Percent: {round(self.maxDrawdownPercent, 2)}%\n'
-                f'   Drawdown Duration: {days} Days, {hours} Hours, {minutes} Minutes, {seconds} Seconds')
+                f'   Drawdown Duration: {days:,} Days, {hours:,} Hours, {minutes:,} Minutes, {seconds:,} Seconds')
