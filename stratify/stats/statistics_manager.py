@@ -4,8 +4,8 @@ from ..order import FillStatus
 from datetime import datetime
 from ..data import TickerData
 from ..data import TickerFeed
+from typing import Union, Any
 from ..data import Position
-from typing import Union
 import copy
 
 class StatisticsManager():
@@ -50,7 +50,7 @@ class StatisticsManager():
 
         self.__statisticTrackers__.append(statisticTrackerClass())
 
-    def getStatistic(self, statisticID: str) -> any:
+    def getStatistic(self, statisticID: str) -> Any:
         '''
         Retrieve the computed statistic from the tracker with the matching statisticID.
 
@@ -127,7 +127,7 @@ class StatisticsManager():
 
         netValueProfitOrLoss: float = self.__calculateStrategyNetCashProfitOrLoss__()
         
-        strategyPositions: dict[str,Position] = dict()
+        strategyPositions: dict[str, Position] = dict()
         for order in self.strategyOrdersMade:
             if order.fillStatus in (FillStatus.FILLED, FillStatus.PARTIALLY_FILLED):
                 if isinstance(order, BuyOrder):
@@ -161,7 +161,7 @@ class StatisticsManager():
                                 portfolioValue: float,
                                 commissionPercent: float,
                                 slippagePercent: float,
-                                positions: dict[str:Position],
+                                positions: dict[str, Position],
                                 orders: list[Order],
                                 openOrders: list[Order],
                                 closedOrders: list[Order]) -> None:

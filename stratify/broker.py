@@ -21,7 +21,7 @@ class BrokerStandard():
         self.commissionPercent: float = 0.0
         self.slippagePercent: float = 0.0
 
-        self.__positions__: dict[str:Position] = {}
+        self.__positions__: dict[str, Position] = {}
 
         self.__openOrders__: list[Order] = []
         self.__closedOrders__: list[Order] = []

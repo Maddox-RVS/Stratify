@@ -1,7 +1,7 @@
 from datetime import timedelta
+from typing import Union, Any
 from datetime import datetime
 from ... import stratify
-from typing import Union
 
 class MyStrategy(stratify.Strategy):
     '''
@@ -100,7 +100,7 @@ def test_Strategy():
     netProfitOrLoss: float = strategy.getStatistic(stratify.StatID.NET_PROFIT_OR_LOSS)
     assert netProfitOrLoss == 0.0, 'Net Profit/Loss should be equal to 0.0'
 
-    drawdown: dict[str:any] = strategy.getStatistic(stratify.StatID.MAX_DRAWDOWN)
+    drawdown: dict[str, Any] = strategy.getStatistic(stratify.StatID.MAX_DRAWDOWN)
     assert isinstance(drawdown, dict)
 
     maxDrawdown: float = drawdown['value']

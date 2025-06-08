@@ -88,7 +88,7 @@ class TradesTracker(StatisticTracker):
         averageHoldingTimeSeconds: float = totalHoldingTimeSeconds / self.totalTrades if self.totalTrades != 0 else 0.0
         self.averageTradeHoldingPeriod = timedelta(seconds=averageHoldingTimeSeconds)
 
-    def getStats(self) -> dict[str:Any]:
+    def getStats(self) -> dict[str, Any]:
         return {
             'total': self.totalTrades,
             'won': self.wonTrades,

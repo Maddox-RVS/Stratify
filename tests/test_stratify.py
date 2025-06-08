@@ -58,12 +58,12 @@ def test_stratify():
     finalPortfolioValue: float = strategy.getStatistic(stratify.StatID.FINAL_PORTFOLIO_VALUE)
     netProfitOrLoss: float = strategy.getStatistic(stratify.StatID.NET_PROFIT_OR_LOSS)
     
-    drawdown: dict[str: Any] = strategy.getStatistic(stratify.StatID.MAX_DRAWDOWN)
+    drawdown: dict[str, Any] = strategy.getStatistic(stratify.StatID.MAX_DRAWDOWN)
     maxDrawdown: float = drawdown['value']
     maxDrawdownPercent: float = drawdown['percent']
     maxDrawdownDuration: int = drawdown['duration']
 
-    trades: dict[str: Any] = strategy.getStatistic(stratify.StatID.TRADES)
+    trades: dict[str, Any] = strategy.getStatistic(stratify.StatID.TRADES)
     totalTrades: int = trades['total']
     wonTrades: int = trades['won']
     lostTrades: int = trades['lost']
@@ -99,12 +99,12 @@ def test_stratify():
     finalPortfolioValue: float = strategy.getStatistic(stratify.StatID.FINAL_PORTFOLIO_VALUE)
     netProfitOrLoss: float = strategy.getStatistic(stratify.StatID.NET_PROFIT_OR_LOSS)
     
-    drawdown: dict[str: Any] = strategy.getStatistic(stratify.StatID.MAX_DRAWDOWN)
+    drawdown: dict[str, Any] = strategy.getStatistic(stratify.StatID.MAX_DRAWDOWN)
     maxDrawdown: float = drawdown['value']
     maxDrawdownPercent: float = drawdown['percent']
     maxDrawdownDuration: int = drawdown['duration']
 
-    trades: dict[str: Any] = strategy.getStatistic(stratify.StatID.TRADES)
+    trades: dict[str, Any] = strategy.getStatistic(stratify.StatID.TRADES)
     totalTrades: int = trades['total']
     wonTrades: int = trades['won']
     lostTrades: int = trades['lost']

@@ -1,7 +1,7 @@
 from ..statistic_tracker import StatisticTracker
 from datetime import timedelta
 from datetime import datetime
-from typing import Union
+from typing import Union, Any
 import os
 
 class DrawdownTracker(StatisticTracker):
@@ -69,7 +69,7 @@ class DrawdownTracker(StatisticTracker):
             self.maxDrawdownPercent = max(drawdownPercents)
             self.drawdownDuration = drawdownDurations[drawdownValues.index(self.maxDrawdownValue)]
 
-    def getStats(self) -> dict[str:any]:
+    def getStats(self) -> dict[str, Any]:
         return {'value': self.maxDrawdownValue, 'percent': self.maxDrawdownPercent, 'duration': self.drawdownDuration}
 
     def getStatsStr(self) -> str:

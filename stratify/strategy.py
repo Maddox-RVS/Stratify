@@ -1,8 +1,8 @@
 from .order import Order, BuyOrder, SellOrder, CloseOrder
 from .stats import StatisticsManager
 from datetime import datetime
+from typing import Union, Any
 from .stats import trackers
-from typing import Union
 
 class Strategy():
     '''
@@ -108,7 +108,7 @@ class Strategy():
         self.__statisticsManager__.strategyOrdersMade.append(order)
         return order
     
-    def getStatistic(self, statisticID: str) -> any:
+    def getStatistic(self, statisticID: str) -> Any:
         '''
         Retrieves a statistic by its ID from the strategy's statistics manager.
 

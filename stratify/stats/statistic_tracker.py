@@ -1,7 +1,7 @@
+from typing import Union, Any
 from datetime import datetime
 from ..data import Position
 from ..order import Order
-from typing import Union
 
 class StatisticTracker():
     '''
@@ -33,7 +33,7 @@ class StatisticTracker():
         self.portfolioValue: float = 0.0
         self.commissionPercent: float = 0.0
         self.slippagePercent: float = 0.0
-        self.positions: dict[str:Position] = {}
+        self.positions: dict[str, Position] = {}
         self.orders: list[Order] = []
         self.openOrders: list[Order] = []
         self.closedOrders: list[Order] = []
@@ -53,7 +53,7 @@ class StatisticTracker():
                                 portfolioValue: float,
                                 commissionPercent: float,
                                 slippagePercent: float,
-                                positions: dict[str:Position],
+                                positions: dict[str, Position],
                                 orders: list[Order],
                                 openOrders: list[Order],
                                 closedOrders: list[Order],
@@ -138,7 +138,7 @@ class StatisticTracker():
 
         pass
 
-    def getStats(self) -> any:
+    def getStats(self) -> Any:
         '''
         Returns the computed statistics.
 
