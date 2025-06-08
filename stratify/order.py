@@ -30,6 +30,8 @@ class Order():
         self.units: int = units
         self.fillStatus: FillStatus = FillStatus.PENDING
 
+        self._unitsActuallyTraded: int = 0.0
+
         # Net impact on the total cash in the portfolio this order has
         self._portfolioCashImpact: float = 0.0
 

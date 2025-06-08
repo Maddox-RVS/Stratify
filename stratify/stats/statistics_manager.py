@@ -1,10 +1,10 @@
+from ..order import Order, BuyOrder, SellOrder, CloseOrder
 from .statistic_tracker import StatisticTracker
 from ..order import FillStatus
 from datetime import datetime
 from ..data import TickerData
 from ..data import TickerFeed
 from ..data import Position
-from ..order import Order
 from typing import Union
 import copy
 
@@ -126,13 +126,22 @@ class StatisticsManager():
         '''
 
         netValueProfitOrLoss: float = self.__calculateStrategyNetCashProfitOrLoss__()
-        strategyPositions: list[Position] = []
+        
+        strategyPositions: dict[str,Position] = dict()
         for order in self.strategyOrdersMade:
             if order.fillStatus in (FillStatus.FILLED, FillStatus.PARTIALLY_FILLED):
-                strategyPositions.append(Position(order.ticker, order.units))
-        for position in strategyPositions:
-            positionTicker: str = position.ticker
-            positionUnits: int = position.units
+                if isinstance(order, BuyOrder):
+                    position: Position = strategyPositions.get(order.ticker, Position(order.ticker))
+                    position.units += order._unitsActuallyTraded
+                    strategyPositions[order.ticker] = position
+                elif isinstance(order, (SellOrder, CloseOrder)):
+                    position: Position = strategyPositions.get(order.ticker, Position(order.ticker))
+                    position.units -= order._unitsActuallyTraded
+                    strategyPositions[order.ticker] = position
+
+        for ticker in strategyPositions:
+            positionTicker: str = ticker
+            positionUnits: int = strategyPositions[ticker].units
 
             tickerData: TickerData = self.__getTickerInfo__(positionTicker)
             positionCashValue: float = tickerData.close * positionUnits

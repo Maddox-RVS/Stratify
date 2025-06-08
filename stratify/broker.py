@@ -161,6 +161,7 @@ class BrokerStandard():
         position.units += tangibleUnits
         self.__positions__[order.ticker] = position
 
+        order._unitsActuallyTraded = tangibleUnits
         order.fillStatus = FillStatus.PARTIALLY_FILLED if tangibleUnits < order.units else FillStatus.FILLED
 
         self.__closeOrder__(order)
@@ -192,6 +193,7 @@ class BrokerStandard():
         position.units -= unitsToSell
         self.__positions__[order.ticker] = position
 
+        order._unitsActuallyTraded = unitsToSell
         order.fillStatus = FillStatus.PARTIALLY_FILLED if unitsToSell < order.units else FillStatus.FILLED
 
         self.__closeOrder__(order)
