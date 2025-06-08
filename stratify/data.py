@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Iterator
 
@@ -35,10 +36,10 @@ class TickerData():
         return False
     
     def __str__(self) -> str:
-        return (f'TickerData(ticker={self.ticker}, ',
-                f'dateTime={self.dateTime.strftime("%Y-%m-%d %H:%M:%S")}, ',
-                f'open={self.open:.2f}, close={self.close:.2f}, ',
-                f'low={self.low:.2f}, high={self.high:.2f}, ',
+        return (f'TickerData(ticker={self.ticker}, '
+                f'dateTime={self.dateTime.strftime("%Y-%m-%d %H:%M:%S")}, '
+                f'open={self.open:.2f}, close={self.close:.2f}, '
+                f'low={self.low:.2f}, high={self.high:.2f}, '
                 f'volume={self.volume})')
     
     def __repr__(self) -> str:
@@ -75,10 +76,9 @@ class TickerFeed():
         :return: A string representation of the TickerFeed.
         '''
 
-        result: str = f'TickerFeed:{{{self.feed[0]} ... {len(self.feed) - 2} others ... {self.feed[-1]}}}'
+        result: str = f'TickerFeed:{{{self.feed[0]} ... {len(self.feed) - 2} others ... {self.feed[-1]}}}' if len(self.feed) != 0 else 'TickerFeed:{Empty}'
         if len(self.feed) == 2: result = f'TickerFeed:{{{self.feed[0]}, {self.feed[1]}}}'
-        if len(self.feed) == 1: result = f'TickerFeed:{{{self.feed[0]}}}'
-        if len(self.feed) == 0: result = 'TickerFeed:{{Empty}}'
+        elif len(self.feed) == 1: result = f'TickerFeed:{{{self.feed[0]}}}'
 
         return result
     
