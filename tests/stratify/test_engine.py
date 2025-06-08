@@ -14,7 +14,7 @@ def test_downloadData():
     tickerFeedAPPL: stratify.TickerFeed = stratify.downloadData('AAPL', startDate, endDate)
 
     # Compare the downloaded data with the static data
-    assert isinstance(tickerFeedAPPL, stratify.TickerFeed), "Downloaded data is not a TickerFeed"
-    assert len(tickerFeedAPPL) == len(historicalTickerFeedAAPL), "TickerFeed length mismatch"
-    assert tickerFeedAPPL.getByFirstDate() == historicalTickerFeedAAPL.getByFirstDate(), "First date mismatch"
-    assert tickerFeedAPPL.getByLastDate() == historicalTickerFeedAAPL.getByLastDate(), "Last date mismatch"
+    assert isinstance(tickerFeedAPPL, stratify.TickerFeed), 'Downloaded data is not a TickerFeed'
+    assert len(tickerFeedAPPL) == len(historicalTickerFeedAAPL), 'TickerFeed length mismatch'
+    assert tickerFeedAPPL.getByFirstDate() == historicalTickerFeedAAPL.getByFirstDate(), 'First date mismatch'
+    assert tickerFeedAPPL.getByLastDate() == historicalTickerFeedAAPL.getByLastDate(), 'Last date mismatch'

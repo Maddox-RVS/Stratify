@@ -3,10 +3,10 @@ from ... import stratify
 
 def test_BuyOrder():
     # Create a BuyOrder instance
-    order: stratify.order.Order = stratify.order.BuyOrder("AAPL", 10)
+    order: stratify.order.Order = stratify.order.BuyOrder('AAPL', 10)
 
     # Check if order values are set correctly
-    assert order.ticker == "AAPL"
+    assert order.ticker == 'AAPL'
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
     assert order.__portfolioCashImpact__ == 0.0
@@ -18,15 +18,15 @@ def test_BuyOrder():
     assert order.fillStatus == stratify.order.FillStatus.CANCELLED
 
     # Check default units
-    order = stratify.order.BuyOrder("GOOGL")
+    order = stratify.order.BuyOrder('GOOGL')
     assert order.units == 1
 
 def test_SellOrder():
     # Create a SellOrder instance
-    order: stratify.order.Order = stratify.order.SellOrder("AAPL", 10)
+    order: stratify.order.Order = stratify.order.SellOrder('AAPL', 10)
 
     # Check if order values are set correctly
-    assert order.ticker == "AAPL"
+    assert order.ticker == 'AAPL'
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
     assert order.__portfolioCashImpact__ == 0.0
@@ -38,15 +38,15 @@ def test_SellOrder():
     assert order.fillStatus == stratify.order.FillStatus.CANCELLED
 
     # Check default units
-    order = stratify.order.SellOrder("GOOGL")
+    order = stratify.order.SellOrder('GOOGL')
     assert order.units == 1
 
 def test_CloseOrder():
     # Create a CloseOrder instance
-    order: stratify.order.Order = stratify.order.CloseOrder("AAPL", 10)
+    order: stratify.order.Order = stratify.order.CloseOrder('AAPL', 10)
 
     # Check if order values are set correctly
-    assert order.ticker == "AAPL"
+    assert order.ticker == 'AAPL'
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
     assert order.__portfolioCashImpact__ == 0.0
@@ -58,5 +58,5 @@ def test_CloseOrder():
     assert order.fillStatus == stratify.order.FillStatus.CANCELLED
 
     # Check default units
-    order = stratify.order.CloseOrder("GOOGL")
+    order = stratify.order.CloseOrder('GOOGL')
     assert order.units == 1
