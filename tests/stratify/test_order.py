@@ -9,7 +9,7 @@ def test_BuyOrder():
     assert order.ticker == 'AAPL'
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
-    assert order.__portfolioCashImpact__ == 0.0
+    assert order._portfolioCashImpact == 0.0
     assert isinstance(order.__openedStartTime__, datetime)
     assert order.__closedEndTime__ is None
 
@@ -29,7 +29,7 @@ def test_SellOrder():
     assert order.ticker == 'AAPL'
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
-    assert order.__portfolioCashImpact__ == 0.0
+    assert order._portfolioCashImpact == 0.0
     assert isinstance(order.__openedStartTime__, datetime)
     assert order.__closedEndTime__ is None
 
@@ -49,7 +49,7 @@ def test_CloseOrder():
     assert order.ticker == 'AAPL'
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
-    assert order.__portfolioCashImpact__ == 0.0
+    assert order._portfolioCashImpact == 0.0
     assert isinstance(order.__openedStartTime__, datetime)
     assert order.__closedEndTime__ is None
 

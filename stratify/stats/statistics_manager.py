@@ -114,7 +114,7 @@ class StatisticsManager():
         netCashProfitOrLoss: float = 0.0
         for order in self.strategyOrdersMade:
             if order.fillStatus in (FillStatus.FILLED, FillStatus.PARTIALLY_FILLED):
-                netCashProfitOrLoss += order.__portfolioCashImpact__
+                netCashProfitOrLoss += order._portfolioCashImpact
         return netCashProfitOrLoss
     
     def __calculateStrategyNetValueProfitOrLoss__(self) -> float:

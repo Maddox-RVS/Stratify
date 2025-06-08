@@ -157,7 +157,7 @@ class BrokerStandard():
         position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
         tradeValue: float = orderCost + commisionCash
         self.cash -= tradeValue
-        order.__portfolioCashImpact__ = (-1.0 * tradeValue)
+        order._portfolioCashImpact = (-1.0 * tradeValue)
         position.units += tangibleUnits
         self.__positions__[order.ticker] = position
 
@@ -188,7 +188,7 @@ class BrokerStandard():
         commissionCash: float = sellValue * self.commissionPercent
         netCashReceived = sellValue - commissionCash
         self.cash += netCashReceived
-        order.__portfolioCashImpact__ = netCashReceived
+        order._portfolioCashImpact = netCashReceived
         position.units -= unitsToSell
         self.__positions__[order.ticker] = position
 
