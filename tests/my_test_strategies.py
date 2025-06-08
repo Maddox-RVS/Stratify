@@ -1,6 +1,8 @@
 from .. import stratify
 import random
 
+random.seed(1)
+
 class MyTestStrategy_BuyAndHold(stratify.Strategy):
     def __init__(self):
         super().__init__()
