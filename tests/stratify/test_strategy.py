@@ -26,13 +26,13 @@ def test_Strategy():
     assert strategy.low is None, 'Default low should be None'
     assert strategy.high is None, 'Default high should be None'
     assert strategy.volume is None, 'Default volume should be None'
-    assert isinstance(strategy.__statisticsManager__, stratify.stats.StatisticsManager), 'StatisticsManager should be an instance of StatisticsManager'
-    assert len(strategy.__orders__) == 0, 'Default orders list should be empty'
-    assert not strategy.__hasStarted__, 'Default hasStarted should be False'
+    assert isinstance(strategy._statisticsManager, stratify.stats.StatisticsManager), 'StatisticsManager should be an instance of StatisticsManager'
+    assert len(strategy._orders) == 0, 'Default orders list should be empty'
+    assert not strategy._hasStarted, 'Default hasStarted should be False'
 
     # Check adding default statistics trackers
     strategy.__addDefaultStatisticTrackers__()
-    assert len(strategy.__statisticsManager__.__statisticTrackers__) > 0, 'Default statistic trackers should be added'
+    assert len(strategy._statisticsManager._statisticTrackers) > 0, 'Default statistic trackers should be added'
 
     # Check creating a buy order
     order: stratify.order.Order = strategy.buy(units=10)
@@ -40,18 +40,18 @@ def test_Strategy():
     assert order.ticker == None, 'Order ticker should be "None"'
     assert order.units == 10, 'Order units should be 10'
     assert order.fillStatus == stratify.order.FillStatus.PENDING, 'Order status should be PENDING'
-    assert len(strategy.__orders__) == 1, 'Orders list should contain 1 order'
-    assert order in strategy.__orders__, 'Order should be in the strategy orders list'
-    assert order in strategy.__statisticsManager__.strategyOrdersMade, 'Order should be in the statistics manager orders list'
+    assert len(strategy._orders) == 1, 'Orders list should contain 1 order'
+    assert order in strategy._orders, 'Order should be in the strategy orders list'
+    assert order in strategy._statisticsManager.strategyOrdersMade, 'Order should be in the statistics manager orders list'
 
     order: stratify.order.Order = strategy.buy()
     assert isinstance(order, stratify.order.BuyOrder), 'Order should be an instance of BuyOrder'
     assert order.ticker == None, 'Order ticker should be "None"'
     assert order.units == 1, 'Order units should be 1'
     assert order.fillStatus == stratify.order.FillStatus.PENDING, 'Order status should be PENDING'
-    assert len(strategy.__orders__) == 2, 'Orders list should contain 2 orders'
-    assert order in strategy.__orders__, 'Order should be in the strategy orders list'
-    assert order in strategy.__statisticsManager__.strategyOrdersMade, 'Order should be in the statistics manager orders list'
+    assert len(strategy._orders) == 2, 'Orders list should contain 2 orders'
+    assert order in strategy._orders, 'Order should be in the strategy orders list'
+    assert order in strategy._statisticsManager.strategyOrdersMade, 'Order should be in the statistics manager orders list'
     
     # Check creating a sell order
     order = strategy.sell(units=5)
@@ -59,18 +59,18 @@ def test_Strategy():
     assert order.ticker == None, 'Order ticker should be "None"'
     assert order.units == 5, 'Order units should be 5'
     assert order.fillStatus == stratify.order.FillStatus.PENDING, 'Order status should be PENDING'
-    assert len(strategy.__orders__) == 3, 'Orders list should contain 3 orders'
-    assert order in strategy.__orders__, 'Order should be in the strategy orders list'
-    assert order in strategy.__statisticsManager__.strategyOrdersMade, 'Order should be in the statistics manager orders list'
+    assert len(strategy._orders) == 3, 'Orders list should contain 3 orders'
+    assert order in strategy._orders, 'Order should be in the strategy orders list'
+    assert order in strategy._statisticsManager.strategyOrdersMade, 'Order should be in the statistics manager orders list'
 
     order = strategy.sell()
     assert isinstance(order, stratify.order.SellOrder), 'Order should be an instance of SellOrder'
     assert order.ticker == None, 'Order ticker should be "None"'
     assert order.units == 1, 'Order units should be 1'
     assert order.fillStatus == stratify.order.FillStatus.PENDING, 'Order status should be PENDING'
-    assert len(strategy.__orders__) == 4, 'Orders list should contain 4 orders'
-    assert order in strategy.__orders__, 'Order should be in the strategy orders list'
-    assert order in strategy.__statisticsManager__.strategyOrdersMade, 'Order should be in the statistics manager orders list'
+    assert len(strategy._orders) == 4, 'Orders list should contain 4 orders'
+    assert order in strategy._orders, 'Order should be in the strategy orders list'
+    assert order in strategy._statisticsManager.strategyOrdersMade, 'Order should be in the statistics manager orders list'
 
     # Check creating a close order
     order = strategy.closePosition()
@@ -78,9 +78,9 @@ def test_Strategy():
     assert order.ticker == None, 'Order ticker should be "None"'
     assert order.units == 1, 'Order units should be 1'
     assert order.fillStatus == stratify.order.FillStatus.PENDING, 'Order status should be PENDING'
-    assert len(strategy.__orders__) == 5, 'Orders list should contain 5 orders'
-    assert order in strategy.__orders__, 'Order should be in the strategy orders list'
-    assert order in strategy.__statisticsManager__.strategyOrdersMade, 'Order should be in the statistics manager orders list'
+    assert len(strategy._orders) == 5, 'Orders list should contain 5 orders'
+    assert order in strategy._orders, 'Order should be in the strategy orders list'
+    assert order in strategy._statisticsManager.strategyOrdersMade, 'Order should be in the statistics manager orders list'
 
     # Check getting statistics from strategy
     totalReturn: float = strategy.getStatistic(stratify.StatID.TOTAL_RETURN)

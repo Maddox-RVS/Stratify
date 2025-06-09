@@ -22,23 +22,23 @@ class Strategy():
         self.high: Union[None, float] = None
         self.volume: Union[None, int] = None
 
-        self.__statisticsManager__: StatisticsManager = StatisticsManager()
-        self.__orders__: list[Order] = []
-        self.__hasStarted__: bool = False
+        self._statisticsManager: StatisticsManager = StatisticsManager()
+        self._orders: list[Order] = []
+        self._hasStarted: bool = False
 
     def __addDefaultStatisticTrackers__(self):
         # Basic Performance Statistics
-        self.__statisticsManager__.addStatisticTracker(trackers.TotalReturnTracker)
-        self.__statisticsManager__.addStatisticTracker(trackers.AnnualizedReturnTracker)
-        self.__statisticsManager__.addStatisticTracker(trackers.StartingCashTracker)
-        self.__statisticsManager__.addStatisticTracker(trackers.FinalPortfolioValueTracker)
-        self.__statisticsManager__.addStatisticTracker(trackers.NetProfitOrLossTracker)
+        self._statisticsManager.addStatisticTracker(trackers.TotalReturnTracker)
+        self._statisticsManager.addStatisticTracker(trackers.AnnualizedReturnTracker)
+        self._statisticsManager.addStatisticTracker(trackers.StartingCashTracker)
+        self._statisticsManager.addStatisticTracker(trackers.FinalPortfolioValueTracker)
+        self._statisticsManager.addStatisticTracker(trackers.NetProfitOrLossTracker)
 
         # Drawdown Statistics
-        self.__statisticsManager__.addStatisticTracker(trackers.DrawdownTracker)
+        self._statisticsManager.addStatisticTracker(trackers.DrawdownTracker)
 
         # Trade Statistics
-        self.__statisticsManager__.addStatisticTracker(trackers.TradesTracker)
+        self._statisticsManager.addStatisticTracker(trackers.TradesTracker)
 
     def start(self) -> None:
         '''
@@ -79,8 +79,8 @@ class Strategy():
         '''
 
         order: BuyOrder = BuyOrder(self.ticker, units)
-        self.__orders__.append(order)
-        self.__statisticsManager__.strategyOrdersMade.append(order)
+        self._orders.append(order)
+        self._statisticsManager.strategyOrdersMade.append(order)
         return order
 
     def sell(self, units: int = 1) -> Order:
@@ -92,8 +92,8 @@ class Strategy():
         '''
 
         order: SellOrder = SellOrder(self.ticker, units)
-        self.__orders__.append(order)
-        self.__statisticsManager__.strategyOrdersMade.append(order)
+        self._orders.append(order)
+        self._statisticsManager.strategyOrdersMade.append(order)
         return order
 
     def closePosition(self) -> Order:
@@ -104,8 +104,8 @@ class Strategy():
         '''
 
         order: CloseOrder = CloseOrder(self.ticker)
-        self.__orders__.append(order)
-        self.__statisticsManager__.strategyOrdersMade.append(order)
+        self._orders.append(order)
+        self._statisticsManager.strategyOrdersMade.append(order)
         return order
     
     def getStatistic(self, statisticID: str) -> Any:
@@ -116,4 +116,4 @@ class Strategy():
         :return: The value or object associated with the specified statistic ID.
         '''
         
-        return self.__statisticsManager__.getStatistic(statisticID)
+        return self._statisticsManager.getStatistic(statisticID)

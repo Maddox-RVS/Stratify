@@ -62,7 +62,7 @@ class TradesTracker(StatisticTracker):
             else: self.lostTrades += 1
             tradeProfits.append(tradeProfit)
 
-            totalHoldingTimeSeconds += (sellOrder.__closedEndTime__ - matchingBuyOrder.__openedStartTime__).total_seconds()
+            totalHoldingTimeSeconds += (sellOrder._closedEndTime - matchingBuyOrder._openedStartTime).total_seconds()
 
             sellOrder.units -= matchedUnits
             matchingBuyOrder.units -= matchedUnits

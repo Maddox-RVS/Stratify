@@ -21,13 +21,13 @@ class BrokerStandard():
         self.commissionPercent: float = 0.0
         self.slippagePercent: float = 0.0
 
-        self.__positions__: dict[str, Position] = {}
+        self._positions: dict[str, Position] = {}
 
-        self.__openOrders__: list[Order] = []
-        self.__closedOrders__: list[Order] = []
+        self._openOrders: list[Order] = []
+        self._closedOrders: list[Order] = []
 
-        self.__dateTime__: Union[None, datetime] = None
-        self.__tickerFeeds__: list[TickerFeed] = []
+        self._dateTime: Union[None, datetime] = None
+        self._tickerFeeds: list[TickerFeed] = []
 
     def setCash(self, cashAmount: float) -> None:
         '''
@@ -81,9 +81,9 @@ class BrokerStandard():
         :return: Number of units held for the ticker.
         '''
 
-        tickers: list[str] = [position.ticker for position in self.__positions__]
+        tickers: list[str] = [position.ticker for position in self._positions]
         if ticker not in tickers: return 0
-        for position in self.__positions__:
+        for position in self._positions:
             if position.ticker == ticker:
                 return position.units
             
@@ -97,13 +97,13 @@ class BrokerStandard():
         value: float = self.cash
 
         timestampTickerFeed: TickerFeed = TickerFeed()
-        for tickerFeed in self.__tickerFeeds__:
+        for tickerFeed in self._tickerFeeds:
             for tickerData in tickerFeed:
-                if tickerData.dateTime == self.__dateTime__:
+                if tickerData.dateTime == self._dateTime:
                     timestampTickerFeed.append(tickerData)
         
         for tickerData in timestampTickerFeed:
-            position: Position = self.__positions__.get(tickerData.ticker, Position(tickerData.ticker))
+            position: Position = self._positions.get(tickerData.ticker, Position(tickerData.ticker))
             value += tickerData.close * position.units
 
         return value
@@ -116,9 +116,9 @@ class BrokerStandard():
         :return: None
         '''
 
-        order.__closedEndTime__ = datetime.now()
-        self.__closedOrders__.append(order)
-        self.__openOrders__.remove(order)
+        order._closedEndTime = datetime.now()
+        self._closedOrders.append(order)
+        self._openOrders.remove(order)
 
     def __rejectOrder__(self, order: Order) -> None:
         '''
@@ -128,7 +128,7 @@ class BrokerStandard():
         :return: None
         '''
 
-        self.__openOrders__.remove(order)
+        self._openOrders.remove(order)
 
     def __executeBuyOrder__(self, tickerData: TickerData, order: Order) -> None:
         '''
@@ -154,12 +154,12 @@ class BrokerStandard():
         orderCost: float = unitPrice * tangibleUnits
         commisionCash: float = orderCost * self.commissionPercent
 
-        position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
+        position: Position = self._positions.get(order.ticker, Position(order.ticker))
         tradeValue: float = orderCost + commisionCash
         self.cash -= tradeValue
         order._portfolioCashImpact = (-1.0 * tradeValue)
         position.units += tangibleUnits
-        self.__positions__[order.ticker] = position
+        self._positions[order.ticker] = position
 
         order._unitsActuallyTraded = tangibleUnits
         order.fillStatus = FillStatus.PARTIALLY_FILLED if tangibleUnits < order.units else FillStatus.FILLED
@@ -175,7 +175,7 @@ class BrokerStandard():
         :return: None
         '''
 
-        position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
+        position: Position = self._positions.get(order.ticker, Position(order.ticker))
         randomSlippagePercent: float = (1 - random.uniform(0.0, self.slippagePercent))
         unitPrice: float = tickerData.close * randomSlippagePercent
 
@@ -191,7 +191,7 @@ class BrokerStandard():
         self.cash += netCashReceived
         order._portfolioCashImpact = netCashReceived
         position.units -= unitsToSell
-        self.__positions__[order.ticker] = position
+        self._positions[order.ticker] = position
 
         order._unitsActuallyTraded = unitsToSell
         order.fillStatus = FillStatus.PARTIALLY_FILLED if unitsToSell < order.units else FillStatus.FILLED
@@ -207,7 +207,7 @@ class BrokerStandard():
         :return: None
         '''
 
-        position: Position = self.__positions__.get(order.ticker, Position(order.ticker))
+        position: Position = self._positions.get(order.ticker, Position(order.ticker))
 
         if position.units == 0:
             order.fillStatus = FillStatus.REJECTED
@@ -225,7 +225,7 @@ class BrokerStandard():
         :return: None
         '''
 
-        for order in self.__openOrders__:
+        for order in self._openOrders:
             if order.fillStatus == FillStatus.CANCELLED:
                 self.__rejectOrder__(order)
 

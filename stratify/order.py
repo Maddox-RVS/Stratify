@@ -36,8 +36,8 @@ class Order():
         self._portfolioCashImpact: float = 0.0
 
         # Used to determine deltatime for how long order was open for
-        self.__openedStartTime__: datetime = datetime.now()
-        self.__closedEndTime__: Union[None, datetime] = None
+        self._openedStartTime: datetime = datetime.now()
+        self._closedEndTime: Union[None, datetime] = None
 
     def cancel(self) -> None:
         '''

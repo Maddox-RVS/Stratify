@@ -117,8 +117,8 @@ class BacktestEngine(__Engine__):
         '''
 
         self.tickerFeeds.append(tickerFeed)
-        self.broker.__tickerFeeds__ = self.tickerFeeds
-        self.broker.__dateTime__ = self.__getFirstDate__()
+        self.broker._tickerFeeds = self.tickerFeeds
+        self.broker._dateTime = self.__getFirstDate__()
 
     def addStrategy(self, strategyClass: type[Strategy]) -> None:
         '''
@@ -139,7 +139,7 @@ class BacktestEngine(__Engine__):
         '''
         
         for strategy in self.strategies:
-            strategy.__statisticsManager__.addStatisticTracker(statisticTrackerClass)
+            strategy._statisticsManager.addStatisticTracker(statisticTrackerClass)
 
     def run(self) -> None:
         '''
@@ -150,7 +150,7 @@ class BacktestEngine(__Engine__):
         '''
 
         for strategy in self.strategies:
-            strategy.__statisticsManager__.setTickerFeeds(self.tickerFeeds)
+            strategy._statisticsManager.setTickerFeeds(self.tickerFeeds)
             strategy.__addDefaultStatisticTrackers__()
 
         allDateTimes: list[datetime] = []
@@ -160,7 +160,7 @@ class BacktestEngine(__Engine__):
         allDateTimes = sorted(set(allDateTimes))
 
         for dateTime in allDateTimes:
-            self.broker.__dateTime__ = dateTime
+            self.broker._dateTime = dateTime
 
             timestampTickerFeed: TickerFeed = TickerFeed()
             for tickerFeed in self.tickerFeeds:
@@ -178,16 +178,16 @@ class BacktestEngine(__Engine__):
                     strategy.high = tickerData.high
                     strategy.volume = tickerData.volume
 
-                    if not strategy.__hasStarted__:
+                    if not strategy._hasStarted:
                         strategy.start()
-                        strategy.__hasStarted__ = True
+                        strategy._hasStarted = True
 
                     strategy.next()
 
-                    self.broker.__openOrders__ += strategy.__orders__
-                    strategy.__orders__.clear()
+                    self.broker._openOrders += strategy._orders
+                    strategy._orders.clear()
 
-                    strategy.__statisticsManager__.updateStatisticsInfo(strategy.ticker,
+                    strategy._statisticsManager.updateStatisticsInfo(strategy.ticker,
                                                                     strategy.dateTime,
                                                                     strategy.open,
                                                                     strategy.close,
@@ -198,18 +198,18 @@ class BacktestEngine(__Engine__):
                                                                     self.broker.getPortfolioValue(),
                                                                     self.broker.commissionPercent,
                                                                     self.broker.slippagePercent,
-                                                                    copy.deepcopy(self.broker.__positions__),
-                                                                    copy.deepcopy(self.broker.__openOrders__) + copy.deepcopy(self.broker.__closedOrders__),
-                                                                    copy.deepcopy(self.broker.__openOrders__),
-                                                                    copy.deepcopy(self.broker.__closedOrders__))
-                    if not strategy.__statisticsManager__.hasStarted:
-                        strategy.__statisticsManager__.start()
-                        strategy.__statisticsManager__.hasStarted = True
+                                                                    copy.deepcopy(self.broker._positions),
+                                                                    copy.deepcopy(self.broker._openOrders) + copy.deepcopy(self.broker._closedOrders),
+                                                                    copy.deepcopy(self.broker._openOrders),
+                                                                    copy.deepcopy(self.broker._closedOrders))
+                    if not strategy._statisticsManager.hasStarted:
+                        strategy._statisticsManager.start()
+                        strategy._statisticsManager.hasStarted = True
 
-                    strategy.__statisticsManager__.update()
+                    strategy._statisticsManager.update()
 
                 self.broker.__executeOrders__(tickerData)
 
         for strategy in self.strategies:
             strategy.end()
-            strategy.__statisticsManager__.end()
+            strategy._statisticsManager.end()

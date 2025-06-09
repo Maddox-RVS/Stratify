@@ -47,7 +47,7 @@ def test_stratify():
     # Assert that the strategy produced the expected statistical results
     for strategy in backtestEngine.strategies:
         print('---------------------------------------------')
-        for statistic in strategy.__statisticsManager__.__statisticTrackers__:
+        for statistic in strategy._statisticsManager._statisticTrackers:
             print(statistic.getStatsStr())
     print('---------------------------------------------')
 

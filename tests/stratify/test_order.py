@@ -10,8 +10,8 @@ def test_BuyOrder():
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
     assert order._portfolioCashImpact == 0.0
-    assert isinstance(order.__openedStartTime__, datetime)
-    assert order.__closedEndTime__ is None
+    assert isinstance(order._openedStartTime, datetime)
+    assert order._closedEndTime is None
 
     # Check cancel order
     order.cancel()
@@ -30,8 +30,8 @@ def test_SellOrder():
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
     assert order._portfolioCashImpact == 0.0
-    assert isinstance(order.__openedStartTime__, datetime)
-    assert order.__closedEndTime__ is None
+    assert isinstance(order._openedStartTime, datetime)
+    assert order._closedEndTime is None
 
     # Check cancel order
     order.cancel()
@@ -50,8 +50,8 @@ def test_CloseOrder():
     assert order.units == 10
     assert order.fillStatus == stratify.order.FillStatus.PENDING
     assert order._portfolioCashImpact == 0.0
-    assert isinstance(order.__openedStartTime__, datetime)
-    assert order.__closedEndTime__ is None
+    assert isinstance(order._openedStartTime, datetime)
+    assert order._closedEndTime is None
 
     # Check cancel order
     order.cancel()

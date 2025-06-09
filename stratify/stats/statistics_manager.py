@@ -26,9 +26,9 @@ class StatisticsManager():
         self.hasStarted: bool = False
         self.strategyOrdersMade: list[Order] = []
 
-        self.__dateTime__: Union[None, datetime] = None
-        self.__tickerFeeds__: Union[None, list[TickerFeed]] = None
-        self.__statisticTrackers__: list[StatisticTracker] = []
+        self._dateTime: Union[None, datetime] = None
+        self._tickerFeeds: Union[None, list[TickerFeed]] = None
+        self._statisticTrackers: list[StatisticTracker] = []
 
     def setTickerFeeds(self, tickerFeeds: list[TickerFeed]) -> None:
         '''
@@ -38,7 +38,7 @@ class StatisticsManager():
         :return: None
         '''
 
-        self.__tickerFeeds__ = tickerFeeds
+        self._tickerFeeds = tickerFeeds
 
     def addStatisticTracker(self, statisticTrackerClass: type[StatisticTracker]) -> None:
         '''
@@ -48,7 +48,7 @@ class StatisticsManager():
         :return: None
         '''
 
-        self.__statisticTrackers__.append(statisticTrackerClass())
+        self._statisticTrackers.append(statisticTrackerClass())
 
     def getStatistic(self, statisticID: str) -> Any:
         '''
@@ -58,7 +58,7 @@ class StatisticsManager():
         :return: The statistic result, type varies depending on the StatisticTracker implementation.
         '''
 
-        for statistic in self.__statisticTrackers__:
+        for statistic in self._statisticTrackers:
             if statistic.statisticID == statisticID:
                 return statistic.getStats()
 
@@ -69,7 +69,7 @@ class StatisticsManager():
         :return: None
         '''
 
-        for statisticTracker in self.__statisticTrackers__:
+        for statisticTracker in self._statisticTrackers:
             statisticTracker.start()
 
     def update(self) -> None:
@@ -83,7 +83,7 @@ class StatisticsManager():
         :return: None
         '''
         
-        for statisticTracker in self.__statisticTrackers__:
+        for statisticTracker in self._statisticTrackers:
             statisticTracker.update()
 
     def __getTickerInfo__(self, ticker: str) -> TickerData:
@@ -95,9 +95,9 @@ class StatisticsManager():
         '''
 
         tickerInfo: Union[None, TickerData] = None
-        for tickerFeed in self.__tickerFeeds__:
+        for tickerFeed in self._tickerFeeds:
             for tickerData in tickerFeed:
-                if tickerData.dateTime == self.__dateTime__ and tickerData.ticker == ticker:
+                if tickerData.dateTime == self._dateTime and tickerData.ticker == ticker:
                     tickerInfo = tickerData
                     break
             if tickerInfo != None:
@@ -187,9 +187,9 @@ class StatisticsManager():
         :return: None
         '''
 
-        self.__dateTime__ = dateTime
+        self._dateTime = dateTime
 
-        for statisticTracker in self.__statisticTrackers__:
+        for statisticTracker in self._statisticTrackers:
             statisticTracker.__updateStatisticsInfo__(ticker, 
                                                 dateTime,
                                                 open,
@@ -216,5 +216,5 @@ class StatisticsManager():
         :return: None
         '''
 
-        for statisticTracker in self.__statisticTrackers__:
+        for statisticTracker in self._statisticTrackers:
             statisticTracker.end()
