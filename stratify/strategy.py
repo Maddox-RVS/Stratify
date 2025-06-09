@@ -33,6 +33,7 @@ class Strategy():
         self._statisticsManager.addStatisticTracker(trackers.StartingCashTracker)
         self._statisticsManager.addStatisticTracker(trackers.FinalPortfolioValueTracker)
         self._statisticsManager.addStatisticTracker(trackers.NetProfitOrLossTracker)
+        self._statisticsManager.addStatisticTracker(trackers.VolatilityTracker)
 
         # Drawdown Statistics
         self._statisticsManager.addStatisticTracker(trackers.DrawdownTracker)

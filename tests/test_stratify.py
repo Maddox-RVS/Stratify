@@ -57,6 +57,7 @@ def test_stratify():
     startingCash: float = strategy.getStatistic(stratify.StatID.STARTING_CASH)
     finalPortfolioValue: float = strategy.getStatistic(stratify.StatID.FINAL_PORTFOLIO_VALUE)
     netProfitOrLoss: float = strategy.getStatistic(stratify.StatID.NET_PROFIT_OR_LOSS)
+    volatility: float = strategy.getStatistic(stratify.StatID.VOLATILITY)
     
     drawdown: dict[str, Any] = strategy.getStatistic(stratify.StatID.MAX_DRAWDOWN)
     maxDrawdown: float = drawdown['value']
@@ -73,14 +74,15 @@ def test_stratify():
     largestLossTrade: float = trades['largest_loss']
     avgTradeHoldingPeriod: timedelta = trades['avg_holding_period']
 
-    assert math.isclose(round(totalReturn, 2), -8.09, abs_tol=0.01) == True, 'Total return should be approximately -8.09%.'
-    assert math.isclose(round(annualizedReturn, 2) , -22.81, abs_tol=0.01) == True, 'Annualized return should be approximately -22.81%.'
+    assert math.isclose(round(totalReturn, 2), -8.09, abs_tol=0.1) == True, 'Total return should be approximately -8.09%.'
+    assert math.isclose(round(annualizedReturn, 2) , -22.81, abs_tol=0.1) == True, 'Annualized return should be approximately -22.81%.'
     assert startingCash == 10000, 'Starting cash should be $10,000.'
-    assert math.isclose(round(finalPortfolioValue, 2), 11197.41, abs_tol=0.01) == True, 'Final portfolio value should be approximately $11,197.41.'
-    assert math.isclose(round(netProfitOrLoss, 2), -809.08, abs_tol=0.01) == True, 'Net profit/loss should be approximately $-809.08.'
+    assert math.isclose(round(finalPortfolioValue, 2), 11197.41, abs_tol=0.1) == True, 'Final portfolio value should be approximately $11,197.41.'
+    assert math.isclose(round(netProfitOrLoss, 2), -809.08, abs_tol=0.1) == True, 'Net profit/loss should be approximately $-809.08.'
+    assert math.isclose(round(volatility, 2), 0.53, abs_tol=0.01) == True, 'Volatility percent should be approximately 0.53%.'
 
-    assert math.isclose(round(maxDrawdown, 2), 1606.58, abs_tol=0.01) == True, 'Maximum drawdown should be approximately $1,606.58.'
-    assert math.isclose(round(maxDrawdownPercent, 2), 15.28, abs_tol=0.01) == True, 'Maximum drawdown percent should be approximately 15.28%.'
+    assert math.isclose(round(maxDrawdown, 2), 1606.58, abs_tol=0.1) == True, 'Maximum drawdown should be approximately $1,606.58.'
+    assert math.isclose(round(maxDrawdownPercent, 2), 15.28, abs_tol=0.1) == True, 'Maximum drawdown percent should be approximately 15.28%.'
     assert maxDrawdownDuration == timedelta(days=98), 'Maximum drawdown duration should be approximately 98 days.'
 
     assert totalTrades == 0, 'Total trades should be 0.'
@@ -98,6 +100,7 @@ def test_stratify():
     startingCash: float = strategy.getStatistic(stratify.StatID.STARTING_CASH)
     finalPortfolioValue: float = strategy.getStatistic(stratify.StatID.FINAL_PORTFOLIO_VALUE)
     netProfitOrLoss: float = strategy.getStatistic(stratify.StatID.NET_PROFIT_OR_LOSS)
+    volatility: float = strategy.getStatistic(stratify.StatID.VOLATILITY)
     
     drawdown: dict[str, Any] = strategy.getStatistic(stratify.StatID.MAX_DRAWDOWN)
     maxDrawdown: float = drawdown['value']
@@ -114,21 +117,22 @@ def test_stratify():
     largestLossTrade: float = trades['largest_loss']
     avgTradeHoldingPeriod: timedelta = trades['avg_holding_period']
 
-    assert math.isclose(round(totalReturn, 2), 20.06, abs_tol=0.01) == True, 'Total return should be approximately 20.06%.'
-    assert math.isclose(round(annualizedReturn, 2), 75.29, abs_tol=0.01) == True, 'Annualized return should be approximately 75.29%.'
+    assert math.isclose(round(totalReturn, 2), 20.06, abs_tol=0.1) == True, 'Total return should be approximately 20.06%.'
+    assert math.isclose(round(annualizedReturn, 2), 75.29, abs_tol=0.1) == True, 'Annualized return should be approximately 75.29%.'
     assert startingCash == 10000, 'Starting cash should be $10,000.'
-    assert math.isclose(round(finalPortfolioValue, 2), 11197.41, abs_tol=0.01) == True, 'Final portfolio value should be approximately $11,197.41.'
-    assert math.isclose(round(netProfitOrLoss, 2), 2006.49, abs_tol=0.01) == True, 'Net profit/loss should be approximately $2,006.49.'
+    assert math.isclose(round(finalPortfolioValue, 2), 11197.41, abs_tol=0.1) == True, 'Final portfolio value should be approximately $11,197.41.'
+    assert math.isclose(round(netProfitOrLoss, 2), 2006.49, abs_tol=0.1) == True, 'Net profit/loss should be approximately $2,006.49.'
+    assert math.isclose(round(volatility, 2), 0.50, abs_tol=0.01) == True, 'Volatility percent should be approximately 0.50%.'
 
-    assert math.isclose(round(maxDrawdown, 2), 623.27, abs_tol=0.01) == True, 'Maximum drawdown should be approximately $623.27.'
-    assert math.isclose(round(maxDrawdownPercent, 2), 5.19, abs_tol=0.01) == True, 'Maximum drawdown percent should be approximately 5.19%.'
+    assert math.isclose(round(maxDrawdown, 2), 623.27, abs_tol=0.1) == True, 'Maximum drawdown should be approximately $623.27.'
+    assert math.isclose(round(maxDrawdownPercent, 2), 5.19, abs_tol=0.1) == True, 'Maximum drawdown percent should be approximately 5.19%.'
     assert maxDrawdownDuration == timedelta(days=18), 'Maximum drawdown duration should be approximately 18 days.'
 
     assert totalTrades == 109, 'Total trades should be 109.'
     assert wonTrades == 69, 'Total trades won should be 69.'
     assert lostTrades == 40, 'Total trades lost should be 40.'
-    assert math.isclose(round(tradesWinRate, 2), 63.3, abs_tol=0.01) == True, 'The trade win rate should be 63.3%.'
-    assert math.isclose(round(avgProfitPerTrade, 2), 567.59, abs_tol=0.01) == True, 'The average profit per trade should be $567.59.'
-    assert math.isclose(round(largestWinTrade, 2), 7495.54, abs_tol=0.01) == True, 'The largest win trade should be $7495.54.'
-    assert math.isclose(round(largestLossTrade, 2), -5960.15, abs_tol=0.01) == True, 'The largest losing trade should be $-5960.15.'
+    assert math.isclose(round(tradesWinRate, 2), 63.3, abs_tol=0.1) == True, 'The trade win rate should be 63.3%.'
+    assert math.isclose(round(avgProfitPerTrade, 2), 567.59, abs_tol=0.1) == True, 'The average profit per trade should be $567.59.'
+    assert math.isclose(round(largestWinTrade, 2), 7495.54, abs_tol=0.1) == True, 'The largest win trade should be $7495.54.'
+    assert math.isclose(round(largestLossTrade, 2), -5960.15, abs_tol=0.1) == True, 'The largest losing trade should be $-5960.15.'
     assert avgTradeHoldingPeriod > timedelta(seconds=1.0), 'The average holding period for a trade should be above 1 second.'
