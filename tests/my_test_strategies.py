@@ -1,7 +1,4 @@
 from .. import stratify
-import random
-
-random.seed(1)
 
 class MyTestStrategy_BuyAndHold(stratify.Strategy):
     def __init__(self):
@@ -13,13 +10,18 @@ class MyTestStrategy_BuyAndHold(stratify.Strategy):
         if not self.bought: self.buy(100)
         self.bought = True
 
-class MyTestStrategy_Random(stratify.Strategy):
+class MyTestStrategy_BuyAndSellFlip(stratify.Strategy):
     def __init__(self):
         super().__init__()
 
+        self.flip: int = 0
+
     def next(self):
-        buyOrSell: int = random.randint(0, 1)
-        if buyOrSell == 0:
-            self.buy(units=20)
-        else:
-            self.sell(units=20)
+        self.flip += 1
+
+        if self.flip < 10:
+            self.buy(units=10)
+        else: 
+            self.sell(units=10)
+            if self.flip == 20:
+                self.flip = 0
