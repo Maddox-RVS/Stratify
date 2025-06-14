@@ -49,6 +49,7 @@ def test_stratify():
         print('---------------------------------------------')
         for statistic in strategy._statisticsManager._statisticTrackers:
             print(statistic.getStatsStr())
+        print(f'\nPositions: {backtestEngine.broker._positions}')
     print('---------------------------------------------')
 
     strategy: stratify.Strategy = backtestEngine.strategies[0]

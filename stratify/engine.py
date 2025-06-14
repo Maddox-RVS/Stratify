@@ -213,3 +213,17 @@ class BacktestEngine(__Engine__):
         for strategy in self.strategies:
             strategy.end()
             strategy._statisticsManager.end()
+
+            strategy.next()
+
+            self.broker._openOrders += strategy._orders
+            strategy._orders.clear()
+
+        for dateTime in allDateTimes:
+            timestampTickerFeed: TickerFeed = TickerFeed()
+            for tickerFeed in self.tickerFeeds:
+                for tickerData in tickerFeed:
+                    if tickerData.dateTime == dateTime:
+                        timestampTickerFeed.append(tickerData)
+            for tickerData in timestampTickerFeed:
+                self.broker.__executeOrders__(tickerData)

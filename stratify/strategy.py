@@ -109,6 +109,19 @@ class Strategy():
         self._statisticsManager.strategyOrdersMade.append(order)
         return order
     
+    def closeAllPositions(self) -> None:
+        '''
+        Closes all open positions by placing CloseOrders for each ticker.
+
+        :return: None
+        '''
+
+        for order in self._statisticsManager.strategyOrdersMade:
+            if isinstance(order, BuyOrder):
+                closeOrder: CloseOrder = CloseOrder(order.ticker)
+                self._orders.append(closeOrder)
+                self._statisticsManager.strategyOrdersMade.append(closeOrder)
+    
     def getStatistic(self, statisticID: str) -> Any:
         '''
         Retrieves a statistic by its ID from the strategy's statistics manager.
